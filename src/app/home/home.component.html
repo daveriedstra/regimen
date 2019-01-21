@@ -1,6 +1,6 @@
 <div class="note">
   <ng-container *ngIf="lastEntry; else noentry">
-    <p class="note__intro">Last time, you said</p>
+    <h2 class="note__intro">Last time, you said</h2>
     <div class="note__content">
       {{lastEntry.note}}
     </div>
@@ -8,21 +8,24 @@
   </ng-container>
 
   <ng-template #noentry>
-    <p class="note__intro">Welcome!</p>
+    <h2 class="note__intro">Welcome!</h2>
     <p class="note__placeholder">
       Click the <strong>Add Entry</strong> button below to add your first entry.
     </p>
   </ng-template>
 </div>
 
+<div class="add callout">
+  <a 
+    routerLink="/new-entry"
+    class="button button--primary"
+  >Add Entry</a>
+</div>
+
 <div class="overview">
   <pre>( overview widget will go here )</pre>
 </div>
 
-<div class="add">
-  <p><a routerLink="/new-entry">Add Entry</a></p>
-</div>
-
 <div class="bottom-link">
-  <p><a routerLink="/preferences">Preferences</a></p>
+  <p><small><a routerLink="/preferences">Preferences</a></small></p>
 </div>
