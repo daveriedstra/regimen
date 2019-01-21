@@ -1,3 +1,31 @@
-<p>
-  preferences works!
-</p>
+<form>
+  <h2>Preferences</h2>
+  <div class="account">
+    <h3>Account</h3>
+    <div class="input-container">
+      <label for="email" class="input-label">Email</label>
+      <input type="email" class="input" id="email" name="email" />
+    </div>
+    <div class="input-container">
+      <label for="password" class="input-label">Password</label>
+      <input type="password" class="input input--password" id="password" name="password">
+    </div>
+    <div class="input-container">
+      <label for="password-match" class="input-label">Retype Password</label>
+      <input type="password" class="input input--password" id="password-match" name="password-match">
+    </div>
+  </div>
+  <div class="data">
+    <h3>Data</h3>
+    <div class="input-container">
+      <label for="delete-everything" class="input-label">Delete everything</label>
+      <p class="input-hint">Use this option to delete all your data and reset your account to a pristine state.</p>
+      <p class="input-warning">Warning: this cannot be undone!</p>
+      <input type="button" class="input button button--danger" value="Delete it all" />
+    </div>
+  </div>
+</form>
+
+<div class="bottom-link">
+  <p><a href="#" (click)="back($event)">Back</a></p>
+</div>

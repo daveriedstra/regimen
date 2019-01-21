@@ -1,3 +1,75 @@
-<p>
-  new-entry works!
-</p>
+<form>
+  <h2>New Entry</h2>
+  <div class="date">
+    <p>
+      <time><a href="#">{{entry.date}}</a></time>
+    </p>
+  </div>
+
+  <!-- Duration -->
+  <div class="input-container input-container--multi">
+    <label 
+      class="input-label"
+    >Duration</label>
+    <input 
+      type="number" 
+      class="input input--number" 
+      id="duration-hr" 
+      name="duration-hr" 
+    />
+    <label 
+      for="duration-hr" 
+      class="input-label input-label--inline"
+    >Hr</label>
+    <input 
+      type="number" 
+      class="input input--number" 
+      id="duration-min" 
+      name="duration-min" 
+    />
+    <label 
+      for="duration-mins" 
+      class="input-label input-label--inline"
+    >Min</label>
+  </div>
+
+  <!-- Description -->
+  <div class="input-container">
+    <label 
+      for="description" 
+      class="input-label"
+    >Description</label>
+    <textarea 
+      name="description" 
+      id="description" 
+      class="input input-textarea"
+    ></textarea>
+  </div>
+
+  <!-- Notes -->
+  <div class="input-container">
+    <label 
+      for="notes" 
+      class="input-label"
+    >Notes for next time</label>
+    <textarea 
+      name="notes" 
+      id="notes" 
+      class="input input-textarea"
+    ></textarea>
+  </div>
+
+  <!-- Submit -->
+  <div class="input-container input-container--multi input-container--callout input-container--centered">
+    <a 
+      (click)="back($event)"
+      href="#" 
+      class="input button"
+    >Cancel</a>
+    <input 
+      type="button" 
+      class="input input-button" 
+      value="Add Entry"
+    />
+  </div>
+</form>

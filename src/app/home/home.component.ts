@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Entry } from '../models/entry.model';
 
 @Component({
   selector: 'app-home',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  lastEntry: Entry;
 
   constructor() { }
 

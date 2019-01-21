@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
+import { Entry } from '../models/entry.model';
 
 @Component({
   selector: 'app-new-entry',
@@ -6,10 +8,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./new-entry.component.scss']
 })
 export class NewEntryComponent implements OnInit {
+  entry: Entry;
 
-  constructor() { }
+  constructor(private location: Location) { }
 
   ngOnInit() {
+  }
+
+  back(e: Event) {
+    e.preventDefault();
+    this.location.back();
   }
 
 }
