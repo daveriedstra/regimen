@@ -2,7 +2,7 @@
   <h2>New Entry</h2>
   <div class="date">
     <p>
-      <time><a href="#">{{entry.date}}</a></time>
+      <time><a href="#">{{entry.date | date : 'MMM d'}}</a></time>
     </p>
   </div>
 
@@ -66,10 +66,9 @@
       href="#" 
       class="input button"
     >Cancel</a>
-    <input 
-      type="button" 
-      class="input input-button" 
-      value="Add Entry"
-    />
+    <button
+      class="input button button--primary" 
+      value="submit"
+    >Add Entry</button>
   </div>
 </form>

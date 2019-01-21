@@ -8,7 +8,12 @@ import { Entry } from '../models/entry.model';
   styleUrls: ['./new-entry.component.scss']
 })
 export class NewEntryComponent implements OnInit {
-  entry: Entry;
+  entry: Entry = {
+    date: new Date(),
+    duration: 0,
+    description: '',
+    note: ''
+  };
 
   constructor(private location: Location) { }
 
