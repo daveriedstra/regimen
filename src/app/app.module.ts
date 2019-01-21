@@ -3,10 +3,18 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HomeComponent } from './home/home.component';
+import { NewEntryComponent } from './new-entry/new-entry.component';
+import { StatsComponent } from './stats/stats.component';
+import { PreferencesComponent } from './preferences/preferences.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent,
+    NewEntryComponent,
+    StatsComponent,
+    PreferencesComponent
   ],
   imports: [
     BrowserModule,
