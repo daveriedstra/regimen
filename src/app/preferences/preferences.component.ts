@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-preferences',
@@ -8,13 +8,13 @@ import { Location } from '@angular/common';
 })
 export class PreferencesComponent implements OnInit {
 
-  constructor(private location: Location) { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
 
   back(e: Event) {
     e.preventDefault();
-    this.location.back();
+    this.router.navigate(['..']);
   }
 }

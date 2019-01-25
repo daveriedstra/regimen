@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NewEntryComponent } from './new-entry.component';
+import { Router } from '@angular/router';
 
 describe('NewEntryComponent', () => {
   let component: NewEntryComponent;
@@ -8,7 +9,10 @@ describe('NewEntryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NewEntryComponent ]
+      declarations: [ NewEntryComponent ],
+      providers: [
+        { provide: Router, useValue: {} }
+      ]
     })
     .compileComponents();
   }));

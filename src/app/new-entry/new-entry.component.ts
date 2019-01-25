@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
 import { Entry } from '../models/entry.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-entry',
@@ -15,14 +15,14 @@ export class NewEntryComponent implements OnInit {
     note: ''
   };
 
-  constructor(private location: Location) { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
 
   back(e: Event) {
     e.preventDefault();
-    this.location.back();
+    this.router.navigate(['..'])
   }
 
 }
