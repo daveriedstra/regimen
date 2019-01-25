@@ -19,10 +19,13 @@ body {
 }
 
 .app-container {
-  position: absolute;
+  position: relative;
+  display: block;
   width: 100%;
+  max-width: 50rem;
   min-height: 100%;
   padding: 1rem;
+  margin: 0 auto;
 }
 
 .bottom-link {
