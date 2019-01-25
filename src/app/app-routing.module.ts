@@ -5,19 +5,32 @@ import { NewEntryComponent } from './new-entry/new-entry.component';
 import { StatsComponent } from './stats/stats.component';
 import { PreferencesComponent } from './preferences/preferences.component';
 import { LoginComponent } from './login/login.component';
+import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [{
   path: 'home',
-  component: HomeComponent
+  component: HomeComponent,
+  canActivate: [
+    AuthGuard
+  ]
 }, {
   path: 'new-entry',
-  component: NewEntryComponent
+  component: NewEntryComponent,
+  canActivate: [
+    AuthGuard
+  ]
 }, {
   path: 'stats',
-  component: StatsComponent
+  component: StatsComponent,
+  canActivate: [
+    AuthGuard
+  ]
 }, {
   path: 'preferences',
-  component: PreferencesComponent
+  component: PreferencesComponent,
+  canActivate: [
+    AuthGuard
+  ]
 }, {
   path: 'login',
   component: LoginComponent
