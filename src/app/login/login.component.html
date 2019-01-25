@@ -1,0 +1,56 @@
+  <h1>Regimen</h1>
+  <ng-container *ngIf="signUp; else signin">
+    <form class="sign-up">
+      <h2>Sign up</h2>
+      <div class="input-container">
+        <label for="email" class="input-label">Email</label>
+        <input type="email" class="input" id="email" name="email" />
+      </div>
+      <div class="input-container">
+        <label for="password" class="input-label">Password</label>
+        <input type="password" class="input input--password" id="password" name="password">
+      </div>
+      <div class="input-container">
+        <label for="password-match" class="input-label">Retype Password</label>
+        <input type="password" class="input input--password" id="password-match" name="password-match">
+      </div>
+      <div class="input-container">
+        <button 
+          class="button button--primary"
+        >Sign up</button>
+        <a 
+          href="#" 
+          (click)="$event.preventDefault(); signUp=false"
+          class="button"
+        >
+          Log in
+        </a>
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-template #signin>
+    <form class="sign-in">
+      <h2>Sign in</h2>
+      <div class="input-container">
+        <label for="email" class="input-label">Email</label>
+        <input type="email" class="input" id="email" name="email" />
+      </div>
+      <div class="input-container">
+        <label for="password" class="input-label">Password</label>
+        <input type="password" class="input input--password" id="password" name="password">
+      </div>
+      <div class="input-container">
+        <button 
+          class="button button--primary"
+        >Log in</button>
+        <a 
+          (click)="$event.preventDefault(); signUp=true"
+          href="#" 
+          class="button"
+        >
+          Sign up
+        </a>
+      </div>
+    </form>
+  </ng-template>

@@ -4,6 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { NewEntryComponent } from './new-entry/new-entry.component';
 import { StatsComponent } from './stats/stats.component';
 import { PreferencesComponent } from './preferences/preferences.component';
+import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [{
   path: 'home',
@@ -17,6 +18,9 @@ const routes: Routes = [{
 }, {
   path: 'preferences',
   component: PreferencesComponent
+}, {
+  path: 'login',
+  component: LoginComponent
 }, {
   path: '',
   pathMatch: 'full',
