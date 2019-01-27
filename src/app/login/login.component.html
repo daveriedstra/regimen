@@ -1,18 +1,40 @@
   <h1>Regimen</h1>
-  <ng-container *ngIf="signUp; else signin">
-    <form class="sign-up">
+  <ng-container *ngIf="showSignUp; else signin">
+    <form 
+      #signUpForm="ngForm"
+      class="sign-up" 
+      (ngSubmit)="signUp($event, signUpForm)"
+    >
       <h2>Sign up</h2>
       <div class="input-container">
         <label for="email" class="input-label">Email</label>
-        <input type="email" class="input" id="email" name="email" />
+        <input 
+          type="email" 
+          class="input" 
+          id="email" 
+          name="email" 
+          [(ngModel)]="email"
+        />
       </div>
       <div class="input-container">
         <label for="password" class="input-label">Password</label>
-        <input type="password" class="input input--password" id="password" name="password">
+        <input 
+          type="password" 
+          class="input input--password" 
+          id="password" 
+          name="password"
+          [(ngModel)]="pass"
+        />
       </div>
       <div class="input-container">
         <label for="password-match" class="input-label">Retype Password</label>
-        <input type="password" class="input input--password" id="password-match" name="password-match">
+        <input 
+          type="password" 
+          class="input input--password" 
+          id="password-match" 
+          name="password-match"
+          [(ngModel)]="confirmPass"
+        />
       </div>
       <div class="input-container">
         <button 
@@ -20,12 +42,13 @@
         >Sign up</button>
         <a 
           href="#" 
-          (click)="$event.preventDefault(); signUp=false"
+          (click)="$event.preventDefault(); showSignUp=false"
           class="button"
         >
           Log in
         </a>
       </div>
+      <p>{{errorMessage}}</p>
     </form>
   </ng-container>
 
@@ -45,7 +68,7 @@
           class="button button--primary"
         >Log in</button>
         <a 
-          (click)="$event.preventDefault(); signUp=true"
+          (click)="$event.preventDefault(); showSignUp=true"
           href="#" 
           class="button"
         >
