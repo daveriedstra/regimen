@@ -53,15 +53,31 @@
   </ng-container>
 
   <ng-template #signin>
-    <form class="sign-in">
+    <form 
+      class="sign-in"
+      #loginForm="ngForm"
+      (ngSubmit)="logIn($event, loginForm)"
+    >
       <h2>Sign in</h2>
       <div class="input-container">
         <label for="email" class="input-label">Email</label>
-        <input type="email" class="input" id="email" name="email" />
+        <input 
+          type="email" 
+          class="input" 
+          id="email" 
+          name="email" 
+          [(ngModel)]="email"
+        />
       </div>
       <div class="input-container">
         <label for="password" class="input-label">Password</label>
-        <input type="password" class="input input--password" id="password" name="password">
+        <input 
+          type="password" 
+          class="input input--password" 
+          id="password" 
+          name="password"
+          [(ngModel)]="pass"
+        />
       </div>
       <div class="input-container">
         <button 
@@ -75,5 +91,6 @@
           Sign up
         </a>
       </div>
+      <p>{{errorMessage}}</p>
     </form>
   </ng-template>

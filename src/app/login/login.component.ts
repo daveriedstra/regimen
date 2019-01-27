@@ -21,7 +21,19 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  login() {
+  logIn(e: Event, form: NgForm) {
+    e.preventDefault();
+
+    if (form.invalid) {
+      return;
+    }
+
+    this.auth.logInWithEmail(this.email, this.pass)
+      .subscribe(u => {
+        this.router.navigateByUrl('/');
+      }, err => {
+        this.errorMessage = err;
+      });
   }
 
   signUp(e: Event, form: NgForm) {
