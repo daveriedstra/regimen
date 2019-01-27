@@ -4,8 +4,6 @@ import { LoginComponent } from './login.component';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth.service';
-import { Observable } from 'rxjs';
 import { FakeAfAuth } from '../../mocks/fakeafauth';
 
 describe('LoginComponent', () => {
@@ -39,13 +37,10 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call AuthService.logInWithEmail on logIn', () => {
-    const svc = TestBed.get(AuthService)
-    spyOn(svc, 'logInWithEmail')
-      .and.returnValue(Observable.create(o => {
-        o.next({});
-        o.complete();
-      }));
+  it('should call AfAuth signin method on logIn', () => {
+    const svc = TestBed.get(AngularFireAuth)
+    spyOn(svc.auth, 'signInWithEmailAndPassword')
+      .and.returnValue(Promise.resolve({}));
 
     const email = 'test@email.net',
       pass = 'asdf123ASDF@$';
@@ -53,17 +48,14 @@ describe('LoginComponent', () => {
     component.pass = pass;
     component.doLogIn(new Event(''), {valid: true, invalid: false} as NgForm);
 
-    expect(svc.logInWithEmail)
+    expect(svc.auth.signInWithEmailAndPassword)
       .toHaveBeenCalledWith(email, pass);
   });
 
-  it('should not call AuthService.logInWithEmail if form is invalid', () => {
-    const svc = TestBed.get(AuthService);
-    spyOn(svc, 'logInWithEmail')
-      .and.returnValue(Observable.create(o => {
-        o.next({});
-        o.complete();
-      }));
+  it('should not call AfAuth login method if form is invalid', () => {
+    const svc = TestBed.get(AngularFireAuth);
+    spyOn(svc.auth, 'signInWithEmailAndPassword')
+      .and.returnValue(Promise.resolve({}));
 
     const email = 'test@email.net',
       pass = 'asdf123ASDF@$';
@@ -71,18 +63,14 @@ describe('LoginComponent', () => {
     component.pass = pass;
     component.doLogIn(new Event(''), {valid: false, invalid: true} as NgForm);
 
-    expect(svc.logInWithEmail)
+    expect(svc.auth.signInWithEmailAndPassword)
       .not.toHaveBeenCalled();
   });
 
-
-  it('should call AuthService.signUpWithEmail on signup', () => {
-    const svc = TestBed.get(AuthService);
-    spyOn(svc, 'signUpWithEmail')
-      .and.returnValue(Observable.create(o => {
-        o.next({});
-        o.complete();
-      }));
+  it('should call AfAuth sign up method on signup', () => {
+    const svc = TestBed.get(AngularFireAuth);
+    spyOn(svc.auth, 'createUserWithEmailAndPassword')
+      .and.returnValue(Promise.resolve({}));
 
     const email = 'test@email.net',
       pass = 'asdf123ASDF@$';
@@ -91,17 +79,14 @@ describe('LoginComponent', () => {
 
     component.doSignUp(new Event(''), {valid: true, invalid: false} as NgForm);
 
-    expect(svc.signUpWithEmail)
+    expect(svc.auth.createUserWithEmailAndPassword)
       .toHaveBeenCalledWith(email, pass);
   });
 
-  it('should not call AuthService.signUpWithEmail if form is invalid', () => {
-    const svc = TestBed.get(AuthService);
-    spyOn(svc, 'signUpWithEmail')
-      .and.returnValue(Observable.create(o => {
-        o.next({});
-        o.complete();
-      }));
+  it('should not call AfAuth sign up method if form is invalid', () => {
+    const svc = TestBed.get(AngularFireAuth);
+    spyOn(svc.auth, 'createUserWithEmailAndPassword')
+      .and.returnValue(Promise.resolve({}));
 
     const email = 'test@email.net',
       pass = 'asdf123ASDF@$';
@@ -110,18 +95,14 @@ describe('LoginComponent', () => {
 
     component.doSignUp(new Event(''), {valid: false, invalid: true} as NgForm);
 
-    expect(svc.signUpWithEmail)
+    expect(svc.auth.createUserWithEmailAndPassword)
       .not.toHaveBeenCalled();
   });
 
-
   it('should navigate to / after sign up', (done: DoneFn) => {
-    const svc = TestBed.get(AuthService);
-    spyOn(svc, 'signUpWithEmail')
-      .and.returnValue(Observable.create(o => {
-        o.next({});
-        o.complete();
-      }));
+    const svc = TestBed.get(AngularFireAuth);
+    spyOn(svc.auth, 'createUserWithEmailAndPassword')
+      .and.returnValue(Promise.resolve({}));
 
     const email = 'test@email.net',
       pass = 'asdf123ASDF@$';

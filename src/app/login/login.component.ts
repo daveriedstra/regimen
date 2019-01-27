@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
-import { AuthService } from '../auth.service';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
 
   errorMessage: string;
 
-  constructor(private auth: AuthService, private router: Router) { }
+  constructor(private auth: AngularFireAuth, private router: Router) { }
 
   ngOnInit() {
   }
@@ -28,8 +28,8 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.auth.logInWithEmail(this.email, this.pass)
-      .subscribe(u => {
+    this.auth.auth.signInWithEmailAndPassword(this.email, this.pass)
+      .then(u => {
         this.router.navigateByUrl('/');
       }, err => {
         this.errorMessage = err;
@@ -43,8 +43,8 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.auth.signUpWithEmail(this.email, this.pass)
-      .subscribe(u => {
+    this.auth.auth.createUserWithEmailAndPassword(this.email, this.pass)
+      .then(u => {
         this.router.navigateByUrl('/');
       }, err => {
         this.errorMessage = err.message;

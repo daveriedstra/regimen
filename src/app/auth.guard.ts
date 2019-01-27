@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService } from './auth.service';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 /**
  * Redirects to /login if user is not authenticated
@@ -11,16 +11,24 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  constructor(private auth: AuthService, private router: Router) { }
+  constructor(private auth: AngularFireAuth, private router: Router) { }
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.auth.isAuthenticated) {
-      return true;
-    }
+      return Observable.create(o => {
+        this.auth.authState.subscribe(u => {
+          // user present: we are authed
+          if (!!u) {
+            o.next(true);
+            return o.complete();
+          }
 
-    this.router.navigateByUrl('/login');
-    return false;
+          // not authed
+          this.router.navigateByUrl('/login');
+          o.next(false);
+          return o.complete();
+        });
+      });
   }
 }

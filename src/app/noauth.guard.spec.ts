@@ -1,19 +1,20 @@
 import { TestBed, async, inject } from '@angular/core/testing';
 
 import { NoAuthGuard } from './noauth.guard';
-import { AuthService } from './auth.service';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FakeAfAuth } from '../mocks/fakeafauth';
+import { Observable } from 'rxjs';
 
 describe('NoauthGuard', () => {
-  let fakeRouter;
+  let fakeRouter, fakeAfAuth;
   beforeEach(() => {
     fakeRouter = jasmine.createSpyObj('Router', ['navigateByUrl']) as Router;
+    fakeAfAuth = new FakeAfAuth();
     TestBed.configureTestingModule({
       providers: [
         NoAuthGuard,
-        { provide: AngularFireAuth, useValue: new FakeAfAuth() },
+        { provide: AngularFireAuth, useValue: fakeAfAuth },
         { provide: Router, useValue: fakeRouter }
       ]
     });
@@ -23,27 +24,37 @@ describe('NoauthGuard', () => {
     expect(guard).toBeTruthy();
   }));
 
-  it('should redirect to / if user is authed', () => {
-    const fakeAuthSvc = {
-      isAuthenticated: true
-    } as AuthService;
+  it('should redirect to / if user is authed', (done: DoneFn) => {
+    fakeAfAuth.authState = Observable.create(o => {
+      o.next({});
+    });
 
-    const guard = new NoAuthGuard(fakeAuthSvc, fakeRouter);
+    const guard = new NoAuthGuard(fakeAfAuth, fakeRouter);
     const retVal = guard.canActivate({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot);
-    expect(retVal).toBeFalsy();
-    expect(fakeRouter.navigateByUrl)
-      .toHaveBeenCalledWith('/');
+    expect(retVal instanceof Observable).toBeTruthy();
+
+    (retVal as Observable<any>).subscribe(o => {
+      expect(o).toBeFalsy();
+      expect(fakeRouter.navigateByUrl)
+        .toHaveBeenCalledWith('/');
+      done();
+    });
   });
 
-  it('should allow routing if user is not authed', () => {
-    const fakeAuthSvc = {
-      isAuthenticated: false
-    } as AuthService;
+  it('should allow routing if user is not authed', (done: DoneFn) => {
+    fakeAfAuth.authState = Observable.create(o => {
+      o.next();
+    });
 
-    const guard = new NoAuthGuard(fakeAuthSvc, fakeRouter);
+    const guard = new NoAuthGuard(fakeAfAuth, fakeRouter);
     const retVal = guard.canActivate({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot);
-    expect(retVal).toBeTruthy();
-    expect(fakeRouter.navigateByUrl)
-      .not.toHaveBeenCalled();
+    expect(retVal instanceof Observable).toBeTruthy();
+
+    (retVal as Observable<any>).subscribe(o => {
+      expect(o).toBeTruthy();
+      expect(fakeRouter.navigateByUrl)
+        .not.toHaveBeenCalled();
+      done();
+    });
   });
 });
