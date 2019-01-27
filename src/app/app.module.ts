@@ -13,6 +13,7 @@ import { PreferencesComponent } from './preferences/preferences.component';
 import { LoginComponent } from './login/login.component';
 
 import { environment } from '../environments/environment';
+import { MatchValidator } from './match-validator.directive';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { environment } from '../environments/environment';
     NewEntryComponent,
     StatsComponent,
     PreferencesComponent,
-    LoginComponent
+    LoginComponent,
+    MatchValidator
   ],
   imports: [
     BrowserModule,
