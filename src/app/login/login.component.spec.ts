@@ -50,7 +50,7 @@ describe('LoginComponent', () => {
       pass = 'asdf123ASDF@$';
     component.email = email;
     component.pass = pass;
-    component.logIn(new Event(''), {valid: true, invalid: false} as NgForm);
+    component.doLogIn(new Event(''), {valid: true, invalid: false} as NgForm);
 
     expect(svc.logInWithEmail)
       .toHaveBeenCalledWith(email, pass);
@@ -68,7 +68,7 @@ describe('LoginComponent', () => {
       pass = 'asdf123ASDF@$';
     component.email = email;
     component.pass = pass;
-    component.logIn(new Event(''), {valid: false, invalid: true} as NgForm);
+    component.doLogIn(new Event(''), {valid: false, invalid: true} as NgForm);
 
     expect(svc.logInWithEmail)
       .not.toHaveBeenCalled();
@@ -88,7 +88,7 @@ describe('LoginComponent', () => {
     component.email = email;
     component.pass = pass;
 
-    component.signUp(new Event(''), {valid: true, invalid: false} as NgForm);
+    component.doSignUp(new Event(''), {valid: true, invalid: false} as NgForm);
 
     expect(svc.signUpWithEmail)
       .toHaveBeenCalledWith(email, pass);
@@ -107,7 +107,7 @@ describe('LoginComponent', () => {
     component.email = email;
     component.pass = pass;
 
-    component.signUp(new Event(''), {valid: false, invalid: true} as NgForm);
+    component.doSignUp(new Event(''), {valid: false, invalid: true} as NgForm);
 
     expect(svc.signUpWithEmail)
       .not.toHaveBeenCalled();
@@ -127,7 +127,7 @@ describe('LoginComponent', () => {
     component.email = email;
     component.pass = pass;
 
-    component.signUp(new Event(''), {valid: true, invalid: false} as NgForm);
+    component.doSignUp(new Event(''), {valid: true, invalid: false} as NgForm);
 
     setTimeout(() => {
       expect(fakeRouter.navigateByUrl)

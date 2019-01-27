@@ -1,5 +1,5 @@
   <h1>Regimen</h1>
-  <ng-container *ngIf="showSignUp; else signin">
+  <ng-container *ngIf="showSignUp; else logIn">
     <form 
       #signUpForm="ngForm"
       class="sign-up" 
@@ -52,11 +52,11 @@
     </form>
   </ng-container>
 
-  <ng-template #signin>
+  <ng-template #logIn>
     <form 
-      class="sign-in"
-      #loginForm="ngForm"
-      (ngSubmit)="logIn($event, loginForm)"
+      class="log-in"
+      #logInForm="ngForm"
+      (ngSubmit)="doLogIn($event, logInForm)"
     >
       <h2>Sign in</h2>
       <div class="input-container">

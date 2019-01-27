@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  logIn(e: Event, form: NgForm) {
+  doLogIn(e: Event, form: NgForm) {
     e.preventDefault();
 
     if (form.invalid) {
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  signUp(e: Event, form: NgForm) {
+  doSignUp(e: Event, form: NgForm) {
     e.preventDefault();
 
     if (form.invalid) {
