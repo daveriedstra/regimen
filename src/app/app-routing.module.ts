@@ -6,6 +6,7 @@ import { StatsComponent } from './stats/stats.component';
 import { PreferencesComponent } from './preferences/preferences.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth.guard';
+import { NoAuthGuard } from './noauth.guard';
 
 const routes: Routes = [{
   path: 'home',
@@ -33,7 +34,10 @@ const routes: Routes = [{
   ]
 }, {
   path: 'login',
-  component: LoginComponent
+  component: LoginComponent,
+  canActivate: [
+    NoAuthGuard
+  ]
 }, {
   path: '',
   pathMatch: 'full',
