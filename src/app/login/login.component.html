@@ -14,7 +14,16 @@
           id="email" 
           name="email" 
           [(ngModel)]="email"
+          #emailModel="ngModel"
+          email
+          required
         />
+        <p 
+          class="validation-msg"
+          *ngIf="emailModel.invalid && emailModel.dirty"
+        >
+          Please enter a valid email address.
+        </p>
       </div>
       <div class="input-container">
         <label for="password" class="input-label">Password</label>
@@ -24,7 +33,15 @@
           id="password" 
           name="password"
           [(ngModel)]="pass"
+          #passModel="ngModel"
+          required
         />
+        <p 
+          class="validation-msg"
+          *ngIf="passModel.invalid && passModel.dirty"
+        >
+          Please enter a password.
+        </p>
       </div>
       <div class="input-container">
         <label for="password-match" class="input-label">Retype Password</label>
@@ -34,8 +51,16 @@
           id="password-match" 
           name="password-match"
           [(ngModel)]="confirmPass"
+          #confirmModel="ngModel"
           match="password"
+          required
         />
+        <p 
+          class="validation-msg"
+          *ngIf="confirmModel.invalid && confirmModel.dirty"
+         >
+          Please re-type your password.
+        </p>
       </div>
       <div class="input-container">
         <button 
@@ -68,7 +93,16 @@
           id="email" 
           name="email" 
           [(ngModel)]="email"
+          #loginEmailModel="ngModel"
+          email
+          required
         />
+        <p 
+          class="validation-msg"
+          *ngIf="loginEmailModel.invalid && loginEmailModel.dirty"
+        >
+          Please enter your email address.
+        </p>
       </div>
       <div class="input-container">
         <label for="password" class="input-label">Password</label>
@@ -78,7 +112,15 @@
           id="password" 
           name="password"
           [(ngModel)]="pass"
+          #loginPassModel="ngModel"
+          required
         />
+        <p 
+          class="validation-msg"
+          *ngIf="loginPassModel.invalid && loginPassModel.dirty"
+        >
+          Please enter your password.
+        </p>
       </div>
       <div class="input-container">
         <button 

@@ -137,3 +137,16 @@ a.button--primary {
     margin-left: 1rem;
   }
 }
+
+.input,
+.input-textarea {
+  transition: 
+    box-shadow 250ms ease,
+    border-color 250ms ease;
+  box-shadow: $color-error 0 0.2rem 1rem -1.3rem;
+
+  &.ng-dirty.ng-invalid {
+    border-color: $color-error;
+    box-shadow: $color-error 0 0.2rem 1rem -0.3rem;
+  }
+}
