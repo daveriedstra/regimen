@@ -3,6 +3,10 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 
+/**
+ * Redirects to /login if user is not authenticated
+ * To be used on internal routes.
+ */
 @Injectable({
   providedIn: 'root'
 })
