@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { AuthService } from './auth.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FakeAfAuth } from '../mocks/fakeafauth';
+import { Observable } from 'rxjs';
 
 describe('AuthService', () => {
   let fakeAfAuth;
@@ -128,4 +129,14 @@ describe('AuthService', () => {
       });
   });
 
+  it('should reflect initial logged in state', (done: DoneFn) => {
+    fakeAfAuth.authState = Observable.create(o => {
+      o.next({});
+    });
+    const service = new AuthService(fakeAfAuth);
+    setTimeout(() => {
+      expect(service.isAuthenticated).toBeTruthy();
+      done();
+    }, 0);
+  })
 });

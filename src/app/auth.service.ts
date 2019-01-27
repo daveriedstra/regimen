@@ -10,7 +10,9 @@ export class AuthService {
 
   isAuthenticated: boolean = false;
 
-  constructor(private afAuth: AngularFireAuth) { }
+  constructor(private afAuth: AngularFireAuth) {
+    afAuth.authState.subscribe(u => this.isAuthenticated = !!u);
+  }
 
   logInWithEmail(email: string, password: string): Observable<firebase.User> {
     return Observable.create(o => {

@@ -2,6 +2,7 @@ import { Subject } from "rxjs";
 
 export class FakeAfAuth {
   user = new Subject();
+  authState = new Subject();
   auth = {
     createUserWithEmailAndPassword: () => this.createUserWithEmailAndPassword(),
     signInWithEmailAndPassword: () => this.signInWithEmailAndPassword(),
