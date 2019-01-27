@@ -53,4 +53,17 @@ export class AuthService {
         });
     });
   }
+
+  logOut(): Observable<void> {
+    return Observable.create(o => {
+      this.afAuth.auth.signOut()
+        .then(() => {
+          this.isAuthenticated = false;
+          o.next();
+          o.complete();
+        }, err => {
+          o.error(err);
+        });
+    });
+  }
 }

@@ -8,7 +8,8 @@ class FakeAfAuth {
   user = new Subject();
   auth = {
     createUserWithEmailAndPassword: () => this.createUserWithEmailAndPassword(),
-    signInWithEmailAndPassword: () => this.signInWithEmailAndPassword()
+    signInWithEmailAndPassword: () => this.signInWithEmailAndPassword(),
+    signOut: () => this.signOut()
   };
 
   private resolveUser(res) {
@@ -22,6 +23,10 @@ class FakeAfAuth {
 
   signInWithEmailAndPassword() {
     return new Promise(r => this.resolveUser(r));
+  }
+
+  signOut() {
+    return Promise.resolve();
   }
 }
 
@@ -121,6 +126,31 @@ describe('AuthService', () => {
       .subscribe(undefined, () => {
         expect(service.isAuthenticated).toBeFalsy();
         done();
+      });
+  });
+
+  it('should call firebase signout method', (done: DoneFn) => {
+    spyOn(fakeAfAuth.auth, 'signOut')
+      .and.callThrough();
+
+    const service = new AuthService(fakeAfAuth);
+    service.logOut()
+      .subscribe(() => {
+        expect(fakeAfAuth.auth.signOut)
+          .toHaveBeenCalled();
+        done();
+      });
+  });
+
+  it('should show not logged in after successful signout', (done: DoneFn) => {
+    const service = new AuthService(fakeAfAuth);
+    service.logInWithEmail(accountEmail, accountPass)
+      .subscribe(() => {
+        service.logOut()
+          .subscribe(() => {
+            expect(service.isAuthenticated).toBeFalsy();
+            done();
+          });
       });
   });
 
