@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-preferences',
@@ -8,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class PreferencesComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private auth: AngularFireAuth) { }
 
   ngOnInit() {
   }
@@ -16,5 +17,12 @@ export class PreferencesComponent implements OnInit {
   back(e: Event) {
     e.preventDefault();
     this.router.navigate(['..']);
+  }
+
+  doLogOut() {
+    this.auth.auth.signOut()
+      .then(() => {
+        this.router.navigateByUrl('/');
+      });
   }
 }
