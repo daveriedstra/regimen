@@ -2,33 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { AuthService } from './auth.service';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { Subject } from 'rxjs';
-
-class FakeAfAuth {
-  user = new Subject();
-  auth = {
-    createUserWithEmailAndPassword: () => this.createUserWithEmailAndPassword(),
-    signInWithEmailAndPassword: () => this.signInWithEmailAndPassword(),
-    signOut: () => this.signOut()
-  };
-
-  private resolveUser(res) {
-    res();
-    setTimeout(() => this.user.next({}), 0);
-  }
-
-  createUserWithEmailAndPassword() {
-    return new Promise(r => this.resolveUser(r));
-  }
-
-  signInWithEmailAndPassword() {
-    return new Promise(r => this.resolveUser(r));
-  }
-
-  signOut() {
-    return Promise.resolve();
-  }
-}
+import { FakeAfAuth } from '../mocks/fakeafauth';
 
 describe('AuthService', () => {
   let fakeAfAuth;

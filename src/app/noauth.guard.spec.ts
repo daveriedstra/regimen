@@ -4,6 +4,7 @@ import { NoAuthGuard } from './noauth.guard';
 import { AuthService } from './auth.service';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { FakeAfAuth } from '../mocks/fakeafauth';
 
 describe('NoauthGuard', () => {
   let fakeRouter;
@@ -12,7 +13,7 @@ describe('NoauthGuard', () => {
     TestBed.configureTestingModule({
       providers: [
         NoAuthGuard,
-        { provide: AngularFireAuth, useValue: {} },
+        { provide: AngularFireAuth, useValue: new FakeAfAuth() },
         { provide: Router, useValue: fakeRouter }
       ]
     });

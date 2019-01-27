@@ -6,6 +6,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { Observable } from 'rxjs';
+import { FakeAfAuth } from '../../mocks/fakeafauth';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -21,7 +22,7 @@ describe('LoginComponent', () => {
         FormsModule
       ],
       providers: [
-        { provide: AngularFireAuth, useValue: {} },
+        { provide: AngularFireAuth, useValue: new FakeAfAuth() },
         { provide: Router, useValue: fakeRouter }
       ]
     })
