@@ -4,9 +4,14 @@
 >
   <h2>New Entry</h2>
   <div class="date">
-    <p>
-      <time><a href="#">{{entry.date | date : 'MMM d'}}</a></time>
-    </p>
+    <input 
+      class="input input--date"
+      type="date"
+      [value]="entry.date | date: 'yyyy-MM-dd'"
+      (input)="entry.date = $event.target.valueAsDate"
+      id="date"
+      name="date"
+    />
   </div>
 
   <!-- Duration -->
