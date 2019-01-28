@@ -67,9 +67,11 @@ button {
   text-align: center;
 
   box-shadow: $color-dark 0 0.6rem 1rem -0.4rem;
+  border-radius: $border-radius;
 
   transition: background 250ms ease-in-out, 
               border-color 250ms ease-in-out,
+              opacity 250ms ease-in-out,
               transform 150ms ease;
 }
 
@@ -139,6 +141,7 @@ a.button--primary {
   background: none;
   padding: 0.6rem 0.5rem;
   margin-right: 0.2rem;
+  border-radius: $border-radius;
   &:last-child {
     margin-right: 0;
   }
