@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { FormsModule } from '@angular/forms';
+import { CalendarHeatmap } from 'angular2-calendar-heatmap';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -30,7 +31,8 @@ import { NewlinePipe } from './newline.pipe';
     MatchValidator,
     MinValidator,
     MaxValidator,
-    NewlinePipe
+    NewlinePipe,
+    CalendarHeatmap
   ],
   imports: [
     BrowserModule,
