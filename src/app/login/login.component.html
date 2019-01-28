@@ -20,7 +20,7 @@
         />
         <p 
           class="validation-msg"
-          *ngIf="emailModel.invalid && emailModel.dirty"
+          *ngIf="emailModel.invalid && emailModel.dirty && emailModel.touched"
         >
           Please enter a valid email address.
         </p>
@@ -38,7 +38,7 @@
         />
         <p 
           class="validation-msg"
-          *ngIf="passModel.invalid && passModel.dirty"
+          *ngIf="passModel.invalid && passModel.dirty && passModel.touched"
         >
           Please enter a password.
         </p>
@@ -57,7 +57,7 @@
         />
         <p 
           class="validation-msg"
-          *ngIf="confirmModel.invalid && confirmModel.dirty"
+          *ngIf="confirmModel.invalid && confirmModel.dirty && confirmModel.touched"
          >
           Please re-type your password.
         </p>
@@ -100,7 +100,7 @@
         />
         <p 
           class="validation-msg"
-          *ngIf="loginEmailModel.invalid && loginEmailModel.dirty"
+          *ngIf="loginEmailModel.invalid && loginEmailModel.dirty && loginEmailModel.touched"
         >
           Please enter your email address.
         </p>
@@ -118,7 +118,7 @@
         />
         <p 
           class="validation-msg"
-          *ngIf="loginPassModel.invalid && loginPassModel.dirty"
+          *ngIf="loginPassModel.invalid && loginPassModel.dirty && loginPassModel.touched"
         >
           Please enter your password.
         </p>
