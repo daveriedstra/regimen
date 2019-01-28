@@ -14,6 +14,7 @@ import { LoginComponent } from './login/login.component';
 
 import { environment } from '../environments/environment';
 import { MatchValidator } from './match-validator.directive';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { MatchValidator } from './match-validator.directive';
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
+    AngularFirestoreModule,
     FormsModule
   ],
   providers: [],

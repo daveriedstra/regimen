@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Entry } from '../models/entry.model';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/auth';
+
+import { take } from 'rxjs/operators';
+
+import { Entry } from '../models/entry.model';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-new-entry',
@@ -8,16 +14,30 @@ import { Router } from '@angular/router';
   styleUrls: ['./new-entry.component.scss']
 })
 export class NewEntryComponent implements OnInit {
+  private userEntryCollection: AngularFirestoreCollection<Entry>;
   entry: Entry = {
     date: new Date(),
     duration: 0,
     description: '',
     note: ''
   };
+  hours = 0;
+  mins = 0;
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private afstore: AngularFirestore,
+    private afAuth: AngularFireAuth) {
+  }
 
   ngOnInit() {
+    this.afAuth.user.pipe(
+      take(1)
+    ).subscribe(u => {
+      const uid = u.uid;
+      this.userEntryCollection = this.afstore.doc(`entries/${uid}`)
+        .collection('entries');
+    });
   }
 
   back(e: Event) {
@@ -25,4 +45,14 @@ export class NewEntryComponent implements OnInit {
     this.router.navigate(['..'])
   }
 
+  addEntry(form: NgForm) {
+    if (form.invalid) {
+      return;
+    }
+
+    const minutes = (this.hours * 60) + this.mins;
+    this.entry.duration = minutes * 60 * 1000;
+    this.userEntryCollection.add(this.entry)
+      .then(ref => this.router.navigate(['/']));
+  }
 }

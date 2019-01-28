@@ -1,4 +1,7 @@
-<form>
+<form 
+  #form="ngForm"
+  (ngSubmit)="$event.preventDefault(); addEntry(form);"
+>
   <h2>New Entry</h2>
   <div class="date">
     <p>
@@ -16,6 +19,9 @@
       class="input input--number" 
       id="duration-hr" 
       name="duration-hr" 
+      [(ngModel)]="hours"
+      min="0"
+      max="24"
     />
     <label 
       for="duration-hr" 
@@ -26,6 +32,9 @@
       class="input input--number" 
       id="duration-min" 
       name="duration-min" 
+      [(ngModel)]="mins"
+      min="0"
+      max="59"
     />
     <label 
       for="duration-mins" 
@@ -43,6 +52,7 @@
       name="description" 
       id="description" 
       class="input input-textarea"
+      [(ngModel)]="entry.description"
     ></textarea>
   </div>
 
@@ -56,6 +66,7 @@
       name="notes" 
       id="notes" 
       class="input input-textarea"
+      [(ngModel)]="entry.note"
     ></textarea>
   </div>
 
