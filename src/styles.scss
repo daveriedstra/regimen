@@ -73,18 +73,24 @@ button {
               transform 150ms ease;
 }
 
-.button:hover,
-.button:focus {
+.button:not([disabled]):hover,
+.button:not([disabled]):focus {
   background: #ddd;
 }
 
-.button:focus {
+.button:not([disabled]):focus {
   outline: 1px solid $color-primary-light;
   outline-offset: -4px;
 }
 
-.button:active {
+.button:not([disabled]):active {
   transform: scale(0.99);
+}
+
+.button[disabled] {
+  opacity: 0.5;
+  box-shadow: #353230 0 0.2rem 1rem -0.4rem;
+  cursor: auto;
 }
 
 .button--primary,
@@ -93,8 +99,8 @@ a.button--primary {
   border-color: $color-primary-dark;
   color: $color-bg;
 
-  &:hover,
-  &:focus {
+  &:not([disabled]):hover,
+  &:not([disabled]):focus {
     background: #283233;
     border-color: #283233;
   }
@@ -106,8 +112,8 @@ a.button--primary {
   text-decoration: underline;
   background: none;
 
-  &:hover,
-  &:focus {
+  &:not([disabled]):hover,
+  &:not([disabled]):focus {
     background: none;
   }
 }
@@ -157,7 +163,7 @@ a.button--primary {
     border-color 250ms ease;
   box-shadow: $color-error 0 0.2rem 1rem -1.3rem;
 
-  &.ng-dirty.ng-invalid {
+  &.ng-dirty.ng-touched.ng-invalid {
     border-color: $color-error;
     box-shadow: $color-error 0 0.2rem 1rem -0.3rem;
   }

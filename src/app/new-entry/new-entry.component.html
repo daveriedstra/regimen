@@ -75,6 +75,7 @@
     <button
       class="button button--primary" 
       value="submit"
+      [disabled]="form.invalid"
     >Add Entry</button>
     <a 
       (click)="back($event)"

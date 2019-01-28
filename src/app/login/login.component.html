@@ -65,6 +65,7 @@
       <div class="input-container">
         <button 
           class="button button--primary"
+          [disabled]="signUpForm.invalid"
         >Sign up</button>
         <a 
           href="#" 
@@ -125,6 +126,7 @@
       <div class="input-container">
         <button 
           class="button button--primary"
+          [disabled]="logInForm.invalid"
         >Log in</button>
         <a 
           (click)="$event.preventDefault(); showSignUp=true"
