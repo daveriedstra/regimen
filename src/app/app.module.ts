@@ -17,6 +17,7 @@ import { MatchValidator } from './match-validator.directive';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { MinValidator } from './min-validator.directive';
 import { MaxValidator } from './max-validator.directive';
+import { NewlinePipe } from './newline.pipe';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { MaxValidator } from './max-validator.directive';
     LoginComponent,
     MatchValidator,
     MinValidator,
-    MaxValidator
+    MaxValidator,
+    NewlinePipe
   ],
   imports: [
     BrowserModule,

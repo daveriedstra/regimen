@@ -5,6 +5,7 @@ import { FakeAfstore } from '../../mocks/fake-afstore';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FakeAfAuth } from '../../mocks/fakeafauth';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { NewlinePipe } from '../newline.pipe';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -16,7 +17,10 @@ describe('HomeComponent', () => {
     fakeAfstore = new FakeAfstore();
     fakeAfAuth = new FakeAfAuth();
     TestBed.configureTestingModule({
-      declarations: [ HomeComponent ],
+      declarations: [
+        HomeComponent,
+        NewlinePipe
+      ],
       providers: [
         { provide: AngularFireAuth, useValue: fakeAfAuth },
         { provide: AngularFirestore, useValue: fakeAfstore }

@@ -1,9 +1,10 @@
 <div class="note">
   <ng-container *ngIf="lastEntry; else noentry">
     <h2 class="note__intro">Last time, you said</h2>
-    <div class="note__content">
-      {{lastEntry.note}}
-    </div>
+    <div 
+      class="note__content"
+      [innerHtml]="lastEntry.note | newline"
+    ></div>
     <p class="note__date">From <time>{{lastEntry.date | date}}</time></p>
   </ng-container>
 
