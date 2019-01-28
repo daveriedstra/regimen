@@ -15,6 +15,8 @@ import { LoginComponent } from './login/login.component';
 import { environment } from '../environments/environment';
 import { MatchValidator } from './match-validator.directive';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { MinValidator } from './min-validator.directive';
+import { MaxValidator } from './max-validator.directive';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
     StatsComponent,
     PreferencesComponent,
     LoginComponent,
-    MatchValidator
+    MatchValidator,
+    MinValidator,
+    MaxValidator
   ],
   imports: [
     BrowserModule,
