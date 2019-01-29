@@ -59,7 +59,7 @@ button, input[type=button] {
 
 .button {
   display: inline-block;
-  padding: 1rem 3rem;
+  padding: 1rem 2rem;
   border: thin solid $color-dark;
   text-decoration: none;
 
@@ -139,7 +139,8 @@ a.button--primary {
 }
 
 .input {
-  min-width: 26rem;
+  width: 26rem;
+  max-width: 100%;
   font-family: sans-serif;
   font-size: 0.9rem;
   border: thin solid $color-dark;
@@ -153,8 +154,9 @@ a.button--primary {
 }
 
 .input-textarea {
-  min-width: 26rem;
-  min-height: 12rem;
+  width: 26rem;
+  height: 12rem;
+  max-width: 100%;
 }
 
 .input,
