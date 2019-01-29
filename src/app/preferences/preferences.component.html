@@ -5,9 +5,13 @@
     <div class="input-container">
       <a 
         href="#" 
-        class="button"
+        class="button button--link"
         (click)="doLogOut(); $event.preventDefault();"
       >Log out</a>
+    </div>
+    <div class="input-container">
+      <p class="input-label">Current email</p>
+      <p>{{user.email}}</p>
     </div>
     <div class="input-container">
       <label for="email" class="input-label">Email</label>
