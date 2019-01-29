@@ -6,6 +6,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { FakeAfAuth } from '../../mocks/fakeafauth';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { NewlinePipe } from '../newline.pipe';
+import { CalendarHeatmap } from 'angular2-calendar-heatmap';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -19,7 +20,8 @@ describe('HomeComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         HomeComponent,
-        NewlinePipe
+        NewlinePipe,
+        CalendarHeatmap
       ],
       providers: [
         { provide: AngularFireAuth, useValue: fakeAfAuth },

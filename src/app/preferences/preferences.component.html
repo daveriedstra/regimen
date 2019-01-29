@@ -65,29 +65,13 @@
         value="Update email"
       />
     </div>
+    <p>{{emailMsg}}</p>
   </fieldset>
 
   <fieldset class="password">
     <legend>
       <h3>Password</h3>
     </legend>
-    <div class="input-container">
-      <label for="current-password" class="input-label">Current Password</label>
-      <input 
-        type="password" 
-        class="input input--password" 
-        id="current-password" 
-        name="current-password"
-        [(ngModel)]="currentPassword"
-        #currentPasswordModel="ngModel"
-      />
-      <p 
-        class="validation-msg"
-        *ngIf="currentPasswordModel.invalid && currentPasswordModel.dirty && currentPasswordModel.touched"
-      >
-        Please enter your current password.
-      </p>
-    </div>
     <div class="input-container">
       <label for="new-password" class="input-label">New Password</label>
       <input 
@@ -128,10 +112,11 @@
         type="button"
         class="button"
         (click)="$event.preventDefault(); updatePassword()"
-        [disabled]="!newPasswordModel.value || newPasswordModel.invalid || retypePasswordModel.invalid || !currentPasswordModel.value"
+        [disabled]="!newPasswordModel.value || newPasswordModel.invalid || retypePasswordModel.invalid"
         value="Update password"
       />
     </div>
+    <p>{{passwordMsg}}</p>
   </fieldset>
 
   <fieldset class="data">
@@ -149,6 +134,7 @@
         value="Delete it all"
       />
     </div>
+    <p>{{deleteMsg}}</p>
   </fieldset>
 </form>
 

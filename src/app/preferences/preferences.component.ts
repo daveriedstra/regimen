@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { User } from 'firebase';
+import { User, FirebaseError } from 'firebase';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -18,9 +18,13 @@ export class PreferencesComponent implements OnInit, OnDestroy {
   // form models
   newEmail = '';
   retypeEmail = '';
-  currentPassword = '';
   newPassword = '';
   retypePassword = '';
+
+  // Async validation messages
+  emailMsg = '';
+  passwordMsg = '';
+  deleteMsg = '';
 
   constructor(private router: Router, private auth: AngularFireAuth) { }
 
@@ -68,14 +72,44 @@ export class PreferencesComponent implements OnInit, OnDestroy {
   }
 
   updateEmail() {
-    console.log('updating email to', this.newEmail);
+    this.user.updateEmail(this.newEmail)
+      .then(() => {
+        this.emailMsg = 'Your email address has been updated';
+        this.newEmail = '';
+        this.retypeEmail = '';
+      },
+      (err: firebase.FirebaseError) => {
+        console.dir(err);
+        this.emailMsg = this.getFriendlyMessage(err);
+      });
   }
 
   updatePassword() {
-    console.log('updating password to', this.newPassword);
+    this.user.updatePassword(this.newPassword)
+      .then(() => {
+        this.passwordMsg = 'Your password has been updated.';
+        this.newPassword = '';
+        this.retypePassword = '';
+      },
+      (err: FirebaseError) => {
+        console.dir(err);
+        this.passwordMsg = this.getFriendlyMessage(err);
+      });
   }
 
   deleteAccountData() {
-    console.log('deleting account data!');
+    console.log('STUB: delete account data');
+  }
+
+  /**
+   * Gets an appropriate user-facing message from a FirebaseError
+   * @param e 
+   */
+  private getFriendlyMessage(e: FirebaseError): string {
+    if (e.code === 'auth/requires-recent-login') {
+      return 'Your login is too stale to do this. Please log out, log in, and try again.';
+    } else {
+      return e.message;
+    }
   }
 }
