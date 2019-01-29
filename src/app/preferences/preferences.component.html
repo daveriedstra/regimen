@@ -1,50 +1,155 @@
-<form>
+<form
+  #form="ngForm"
+  (ngSubmit)="$event.preventDefault(); onSubmit(form)"
+>
   <h2>Preferences</h2>
-  <div class="account">
-    <h3>Account</h3>
+  <fieldset class="logout">
     <div class="input-container">
       <a 
         href="#" 
-        class="button button--link"
+        class="button"
         (click)="doLogOut(); $event.preventDefault();"
       >Log out</a>
     </div>
+  </fieldset>
+
+  <fieldset class="email">
+    <legend>
+      <h3>Email</h3>
+    </legend>
     <div class="input-container">
-      <p class="input-label">Current email</p>
-      <p>{{user.email}}</p>
+      <p>{{user?.email}}</p>
     </div>
     <div class="input-container">
-      <label for="email" class="input-label">Email</label>
-      <input type="email" class="input" id="email" name="email" />
+      <label for="new-email" class="input-label">New Email</label>
+      <input 
+        type="new-email" 
+        class="input" 
+        id="new-email" 
+        name="new-email" 
+        [(ngModel)]="newEmail"
+        #newEmailModel="ngModel"
+        email
+      />
+      <p 
+        class="validation-msg"
+        *ngIf="newEmailModel.invalid && newEmailModel.dirty && newEmailModel.touched"
+      >
+        Please enter a valid email address.
+      </p>
     </div>
     <div class="input-container">
-      <label for="password" class="input-label">Password</label>
-      <input type="password" class="input input--password" id="password" name="password">
+      <label for="retype-email" class="input-label">Retype Email</label>
+      <input 
+        type="retype-email" 
+        class="input" 
+        id="retype-email" 
+        name="retype-email" 
+        [(ngModel)]="retypeEmail"
+        #retypeEmailModel="ngModel"
+        match="new-email"
+      />
+      <p 
+        class="validation-msg"
+        *ngIf="retypeEmailModel.invalid && retypeEmailModel.dirty && retypeEmailModel.touched"
+      >
+        Please re-type your new email address.
+      </p>
+    </div>
+    <div class="input-container">
+      <input 
+        type="button"
+        class="button"
+        (click)="$event.preventDefault(); updateEmail()"
+        [disabled]="!newEmailModel.value || newEmailModel.invalid || retypeEmailModel.invalid"
+        value="Update email"
+      />
+    </div>
+  </fieldset>
+
+  <fieldset class="password">
+    <legend>
+      <h3>Password</h3>
+    </legend>
+    <div class="input-container">
+      <label for="current-password" class="input-label">Current Password</label>
+      <input 
+        type="password" 
+        class="input input--password" 
+        id="current-password" 
+        name="current-password"
+        [(ngModel)]="currentPassword"
+        #currentPasswordModel="ngModel"
+      />
+      <p 
+        class="validation-msg"
+        *ngIf="currentPasswordModel.invalid && currentPasswordModel.dirty && currentPasswordModel.touched"
+      >
+        Please enter your current password.
+      </p>
+    </div>
+    <div class="input-container">
+      <label for="new-password" class="input-label">New Password</label>
+      <input 
+        type="password" 
+        class="input input--password" 
+        id="new-password" 
+        name="new-password"
+        [(ngModel)]="newPassword"
+        #newPasswordModel="ngModel"
+      />
+      <p 
+        class="validation-msg"
+        *ngIf="newPasswordModel.invalid && newPasswordModel.dirty && newPasswordModel.touched"
+      >
+        Please enter a valid password.
+      </p>
     </div>
     <div class="input-container">
       <label for="password-match" class="input-label">Retype Password</label>
-      <input type="password" class="input input--password" id="password-match" name="password-match">
+      <input 
+        type="password" 
+        class="input input--password" 
+        id="password-match" 
+        name="password-match"
+        [(ngModel)]="retypePassword"
+        #retypePasswordModel="ngModel"
+        match="new-password"
+      />
+      <p 
+        class="validation-msg"
+        *ngIf="retypePasswordModel.invalid && retypePasswordModel.dirty && retypePasswordModel.touched"
+      >
+        Please re-type your new password.
+      </p>
     </div>
     <div class="input-container">
-      <button 
-        class="button button--primary"
-      >Save</button>
+      <input 
+        type="button"
+        class="button"
+        (click)="$event.preventDefault(); updatePassword()"
+        [disabled]="!newPasswordModel.value || newPasswordModel.invalid || retypePasswordModel.invalid || !currentPasswordModel.value"
+        value="Update password"
+      />
     </div>
-  </div>
+  </fieldset>
 
-  <div class="data">
-    <h3>Data</h3>
+  <fieldset class="data">
+    <legend>
+      <h3>Data</h3>
+    </legend>
     <div class="input-container">
       <label for="delete-everything" class="input-label">Delete everything</label>
       <p class="input-hint">Use this option to delete all your data and reset your account to a pristine state.</p>
       <p class="input-warning">Warning: this cannot be undone!</p>
-      <button 
+      <input 
         type="button" 
         class="button button--danger"
-      >Delete it all
-      </button>
+        (click)="$event.preventDefault(); deleteAccountData();"
+        value="Delete it all"
+      />
     </div>
-  </div>
+  </fieldset>
 </form>
 
 <div class="bottom-link">
