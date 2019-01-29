@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Entry } from '../models/entry.model';
-import { AngularFirestoreCollection, AngularFirestore, CollectionReference, Query } from '@angular/fire/firestore';
+import { AngularFirestore, CollectionReference, Query } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { take, takeUntil, map } from 'rxjs/operators';
+import { take, takeUntil, map, filter } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
 
 @Component({
@@ -12,7 +12,7 @@ import { Observable, Subject } from 'rxjs';
 })
 export class HomeComponent implements OnInit, OnDestroy {
   lastEntry: Entry;
-  overviewData: HmDatum[];
+  overviewData: HmDatum[] = [];
   unsubscribe: Subject<void>;
 
   constructor(
@@ -52,6 +52,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       .valueChanges()
       .pipe(
         takeUntil(this.unsubscribe),
+        filter(e => !!e && e.length > 0),
         map(e => e[0] as Entry)
       );
   }
@@ -62,6 +63,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       .valueChanges()
       .pipe(
         takeUntil(this.unsubscribe),
+        filter(e => !!e)
       ) as Observable<Entry[]>;
   }
 
@@ -87,12 +89,17 @@ export class HomeComponent implements OnInit, OnDestroy {
    * but this heatmap widget is not great either...
    */
   private fixSvg() {
-    const cal = document.getElementsByTagName('calendar-heatmap')[0];
-    const svg = cal.getElementsByTagName('svg')[0];
+    setTimeout(() => {
+      const cal = document.getElementsByTagName('calendar-heatmap')[0];
+      if (!cal) {
+        return;
+      }
+      const svg = cal.getElementsByTagName('svg')[0];
 
-    const w = svg.getAttribute('width'),
-      h = svg.getAttribute('height');
-    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      const w = svg.getAttribute('width'),
+        h = svg.getAttribute('height');
+      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    }, 0);
   }
 
   private todayFilter(ref: CollectionReference): Query {

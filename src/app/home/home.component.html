@@ -25,6 +25,7 @@
 
 <div class="overview">
   <calendar-heatmap
+    *ngIf="overviewData?.length > 0"
     [data]="overviewData"
     overview="month"
     color="#3F4E51"

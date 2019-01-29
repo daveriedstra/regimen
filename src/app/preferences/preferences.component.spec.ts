@@ -5,16 +5,20 @@ import { PreferencesComponent } from './preferences.component';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FakeAfAuth } from '../../mocks/fakeafauth';
 import { FormsModule } from '@angular/forms';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { FakeAfstore } from '../../mocks/fake-afstore';
 
 describe('PreferencesComponent', () => {
   let component: PreferencesComponent;
   let fixture: ComponentFixture<PreferencesComponent>;
-  let fakeRouter, 
-    fakeAfAuth: FakeAfAuth;
+  let fakeRouter,
+    fakeAfAuth: FakeAfAuth,
+    fakeAfstore: FakeAfstore;
 
   beforeEach(async(() => {
     fakeRouter = jasmine.createSpyObj('Router', ['navigateByUrl']);
     fakeAfAuth = new FakeAfAuth();
+    fakeAfstore = new FakeAfstore();
     TestBed.configureTestingModule({
       declarations: [ PreferencesComponent ],
       imports: [
@@ -22,7 +26,8 @@ describe('PreferencesComponent', () => {
       ],
       providers: [
         { provide: Router, useValue: fakeRouter },
-        { provide: AngularFireAuth, useValue: fakeAfAuth }
+        { provide: AngularFireAuth, useValue: fakeAfAuth },
+        { provide: AngularFirestore, useValue: fakeAfstore }
       ]
     })
     .compileComponents();

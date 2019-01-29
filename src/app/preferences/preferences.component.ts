@@ -5,6 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { User, FirebaseError } from 'firebase';
 import { NgForm } from '@angular/forms';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-preferences',
@@ -26,7 +27,10 @@ export class PreferencesComponent implements OnInit, OnDestroy {
   passwordMsg = '';
   deleteMsg = '';
 
-  constructor(private router: Router, private auth: AngularFireAuth) { }
+  constructor(
+    private router: Router,
+    private auth: AngularFireAuth,
+    private afStore: AngularFirestore) { }
 
   ngOnInit() {
     this.unsubscribe = new Subject();
@@ -98,12 +102,52 @@ export class PreferencesComponent implements OnInit, OnDestroy {
   }
 
   deleteAccountData() {
-    console.log('STUB: delete account data');
+    this.deleteMsg = 'Deleting...';
+    this.deleteBatch(`entries/${this.user.uid}/entries`, 100)
+      .then(done => {
+        if (done) {
+          this.deleteMsg = 'Deleted all entries.';
+        } else {
+          this.deleteAccountData();
+        }
+      }, err => {
+        this.deleteMsg = this.getFriendlyMessage(err);
+      });
+  }
+
+  /**
+   * queries the given path for up to the given number of entries,
+   * then sends delete queries for all of the results.
+   * The returned promise resolves with a done value: true if
+   * there are no more docs to delete; false otherwise.
+   * The promise rejects if one of the delete operations fails.
+   */
+  private deleteBatch(path: string, size: number): Promise<boolean> {
+    return new Promise((res, rej) => {
+      this.afStore.collection(path, q => q.limit(size))
+        .get()
+        .subscribe(snap => {
+          if (snap.empty) {
+            res(true);
+          }
+
+          const deletePromises: Promise<void>[] = [];
+          snap.docs.forEach(d => {
+            deletePromises.push(
+              this.afStore.doc(`${path}/${d.id}`).delete()
+            );
+          });
+
+          // output promise resolves or rejects with results
+          // from any of internal delete ops
+          Promise.all(deletePromises)
+            .then(() => res(false), e => rej(e));
+        });
+    });
   }
 
   /**
    * Gets an appropriate user-facing message from a FirebaseError
-   * @param e 
    */
   private getFriendlyMessage(e: FirebaseError): string {
     if (e.code === 'auth/requires-recent-login') {
