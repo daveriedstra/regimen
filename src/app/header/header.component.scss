@@ -1,0 +1,14 @@
+@import "../vars.scss";
+
+:host {
+  display: block;
+  background: $color-dark;
+  color: $color-bg;
+  box-shadow: rgba(53, 50, 48, 0.3) 0 0 6px 0;
+}
+
+.app-wrap {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}

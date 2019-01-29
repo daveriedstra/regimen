@@ -50,13 +50,6 @@ export class PreferencesComponent implements OnInit, OnDestroy {
     this.router.navigate(['..']);
   }
 
-  doLogOut() {
-    this.auth.auth.signOut()
-      .then(() => {
-        this.router.navigateByUrl('/');
-      });
-  }
-
   /**
    * submit handler for the whole form.
    * Determines whether to update email and/or password.

@@ -1,0 +1,35 @@
+@import "../vars.scss";
+
+:host {
+  display: block;
+  position: sticky;
+  top: 100vh;
+  background: $color-dark;
+  color: $color-bg;
+  box-shadow: rgba(53, 50, 48, 0.3) 0 0 6px 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+}
+
+a {
+  padding: 0.2em;
+}
+
+li:first-child a {
+  margin-left: -0.2em;
+}
+
+li.right:last-child a {
+  margin-right: -0.2em;
+}
+
+.right {
+  float: right;
+}

@@ -43,23 +43,6 @@ describe('PreferencesComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call AngularFire logout method', () => {
-    spyOn(fakeAfAuth.auth, 'signOut')
-      .and.returnValue(Promise.resolve());
-    component.doLogOut();
-    expect(fakeAfAuth.auth.signOut)
-      .toHaveBeenCalled();
-  });
-
-  it('should redirect to / on logout', (done: DoneFn) => {
-    component.doLogOut();
-    setTimeout(() => {
-      expect(fakeRouter.navigateByUrl)
-        .toHaveBeenCalledWith('/');
-      done();
-    });
-  });
-
   it('should call firebase updateEmail method', (done: DoneFn) => {
     const userSpy = { updateEmail: () => {} };
     spyOn(userSpy, 'updateEmail')

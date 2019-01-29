@@ -18,27 +18,38 @@ body {
   margin: 0;
 }
 
-.app-container {
-  position: relative;
-  display: block;
-  width: 100%;
+.app-wrap {
   max-width: 50rem;
-  min-height: 100%;
   padding: 1rem;
   margin: 0 auto;
 }
 
-.bottom-link {
-  margin-top: 2rem;
+.app-container {
+  @extend .app-wrap;
+  position: relative;
+  display: block;
+  width: 100%;
 }
 
-a {
+.app-container a {
   color: $color-primary-dark;
   &:active {
     color: $color-primary-light;
   }
   &:visited {
     color: $color-primary-dark;
+  }
+}
+
+app-header, app-footer {
+  a {
+    color: $color-bg;
+    &:active {
+      color: $color-primary-light;
+    }
+    &:visited {
+      color: $color-bg;
+    }
   }
 }
 
@@ -104,7 +115,9 @@ button, input[type=button] {
 a.button--primary {
   background: $color-primary-dark;
   border-color: $color-primary-dark;
-  color: $color-bg;
+  &, &:visited {
+    color: $color-bg;
+  }
 
   &:not([disabled]):hover,
   &:not([disabled]):focus {

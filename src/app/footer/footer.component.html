@@ -1,0 +1,26 @@
+<div class="app-wrap">
+  <ul>
+    <li>
+      <a 
+        href="#" 
+        routerLink="/privacy"
+      >Privacy policy</a>
+    </li>
+    <li>
+      <a 
+        href="https://github.com/daveriedstra/regimen" 
+        target="_blank" 
+        rel="noopener noreferrer"
+      >GitHub</a>
+    </li>
+    <li 
+      class="right"
+      *ngIf="loggedIn"
+    >
+      <a 
+        href="#" 
+        (click)="doLogOut(); $event.preventDefault();"
+      >Log out</a>
+    </li>
+  </ul>
+</div>

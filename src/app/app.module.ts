@@ -19,6 +19,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { MinValidator } from './min-validator.directive';
 import { MaxValidator } from './max-validator.directive';
 import { NewlinePipe } from './newline.pipe';
+import { HeaderComponent } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { NewlinePipe } from './newline.pipe';
     MinValidator,
     MaxValidator,
     NewlinePipe,
-    CalendarHeatmap
+    CalendarHeatmap,
+    HeaderComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
