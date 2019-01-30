@@ -13,25 +13,37 @@ const routes: Routes = [{
   component: HomeComponent,
   canActivate: [
     AuthGuard
-  ]
+  ],
+  data: {
+    headerText: 'Regimen'
+  }
 }, {
   path: 'new-entry',
   component: NewEntryComponent,
   canActivate: [
     AuthGuard
-  ]
+  ],
+  data: {
+    headerText: 'Add entry'
+  }
 }, {
   path: 'stats',
   component: StatsComponent,
   canActivate: [
     AuthGuard
-  ]
+  ],
+  data: {
+    headerText: 'Statistics'
+  }
 }, {
   path: 'preferences',
   component: PreferencesComponent,
   canActivate: [
     AuthGuard
-  ]
+  ],
+  data: {
+    headerText: 'Preferences'
+  }
 }, {
   path: 'login',
   component: LoginComponent,
