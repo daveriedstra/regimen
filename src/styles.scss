@@ -9,7 +9,8 @@
 body {
   background: $color-bg;
   color: $color-text;
-  font-family: sans-serif;
+  font-family: $sans-stack;
+  font-size: 0.9rem;
 
   display: block;
   position: absolute;
@@ -29,6 +30,7 @@ body {
   position: relative;
   display: block;
   width: 100%;
+  padding: 3rem 1rem;
 }
 
 .app-container a {
@@ -57,13 +59,11 @@ app-header, app-footer {
 
 button, input[type=button] {
   display: inline-block;
-  // border: none;
   padding: 1rem 2rem;
   margin: 0;
   background: $color-bg;
   color: $color-text;
-  font-family: sans-serif;
-  font-size: 1rem;
+  font-family: $sans-stack;
   -webkit-appearance: none;
   -moz-appearance: none;
 }
@@ -71,13 +71,14 @@ button, input[type=button] {
 .button {
   display: inline-block;
   padding: 1rem 2rem;
-  border: thin solid $color-dark;
+  border: thin solid $border-color;
   text-decoration: none;
 
   cursor: pointer;
   text-align: center;
 
-  box-shadow: $color-dark 0 0.6rem 1rem -0.4rem;
+  // box-shadow: $color-dark 0 0.6rem 1rem -0.4rem;
+  box-shadow: rgba(53, 50, 48, 0.2) 0 0.2rem 0.4rem -0.2rem;
   border-radius: $border-radius;
 
   transition: background 250ms ease-in-out, 
@@ -93,7 +94,7 @@ button, input[type=button] {
 
 .button:not([disabled]):hover,
 .button:not([disabled]):focus {
-  background: #ddd;
+  background: #efefef;
 }
 
 .button:not([disabled]):focus {
@@ -107,22 +108,25 @@ button, input[type=button] {
 
 .button[disabled] {
   opacity: 0.5;
-  box-shadow: #353230 0 0.2rem 1rem -0.4rem;
+  // box-shadow: #353230 0 0.2rem 1rem -0.4rem;
+  box-shadow: none;
   cursor: auto;
 }
 
 .button--primary,
 a.button--primary {
-  background: $color-primary-dark;
+  // background: $color-primary-pale;
   border-color: $color-primary-dark;
   &, &:visited {
-    color: $color-bg;
+    color: $color-primary-dark;
   }
 
   &:not([disabled]):hover,
   &:not([disabled]):focus {
-    background: #283233;
-    border-color: #283233;
+    // background: #283233;
+    // background: #ADC5D4;
+    background: $color-primary-pale;
+    Border-color: #283233;
   }
 }
 
@@ -145,6 +149,8 @@ a.button--primary {
 
 .input-label {
   display: block;
+  font-size: 0.8rem;
+  margin-bottom: 0.2rem;
 }
 
 .input-container--multi .input + .input-label {
@@ -154,9 +160,9 @@ a.button--primary {
 .input {
   width: 26rem;
   max-width: 100%;
-  font-family: sans-serif;
+  font-family: $sans-stack;
   font-size: 0.9rem;
-  border: thin solid $color-dark;
+  border: thin solid $border-color;
   background: none;
   padding: 0.6rem 0.5rem;
   margin-right: 0.2rem;
@@ -194,8 +200,16 @@ a.button--primary {
 
 fieldset {
   border: none;
-  margin: 0;
+  margin: 2rem 0;
   padding: 0;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 legend {

@@ -1,11 +1,10 @@
 <div class="note">
   <ng-container *ngIf="lastEntry; else noentry">
-    <h2 class="note__intro">Last time, you said</h2>
+    <p class="input-label note__date"><time>{{lastEntry.date | date : 'fullDate'}}</time>:</p>
     <div 
       class="note__content"
       [innerHtml]="lastEntry.note | newline"
     ></div>
-    <p class="note__date">From <time>{{lastEntry.date | date}}</time></p>
   </ng-container>
 
   <ng-template #noentry>
@@ -20,7 +19,7 @@
   <a 
     routerLink="/new-entry"
     class="button button--primary"
-  >Add Entry</a>
+  >New Entry</a>
 </div>
 
 <div class="overview">

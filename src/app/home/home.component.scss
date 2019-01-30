@@ -1,10 +1,11 @@
-// :host {
-//   min-height: 100%;
-//   max-width: 100%
-// }
+@import "../vars.scss";
 
-.note {
-
+.note__content {
+  border: thin solid $border-color;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  font-size: 1.2rem;
+  color: #666;
 }
 
 .overview {
@@ -12,7 +13,7 @@
 }
 
 .add {
-  padding: 1rem 0;
+  padding: 3rem 0 6rem;
   text-align: center
 }
 
