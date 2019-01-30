@@ -7,6 +7,8 @@ import { PreferencesComponent } from './preferences/preferences.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth.guard';
 import { NoAuthGuard } from './noauth.guard';
+import { PrivacyComponent } from './privacy/privacy.component';
+import { The404Component } from './the404/the404.component';
 
 const routes: Routes = [{
   path: 'home',
@@ -51,9 +53,18 @@ const routes: Routes = [{
     NoAuthGuard
   ]
 }, {
+  path: 'privacy',
+  component: PrivacyComponent
+}, {
+  path: '404',
+  component: The404Component
+}, {
   path: '',
   pathMatch: 'full',
   redirectTo: 'home'
+}, {
+  path: '**',
+  redirectTo: '404'
 }];
 
 @NgModule({

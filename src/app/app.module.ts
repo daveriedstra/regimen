@@ -21,6 +21,8 @@ import { MaxValidator } from './max-validator.directive';
 import { NewlinePipe } from './newline.pipe';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { The404Component } from './the404/the404.component';
+import { PrivacyComponent } from './privacy/privacy.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import { FooterComponent } from './footer/footer.component';
     NewlinePipe,
     CalendarHeatmap,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    The404Component,
+    PrivacyComponent
   ],
   imports: [
     BrowserModule,
