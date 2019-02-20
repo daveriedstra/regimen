@@ -29,7 +29,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       this.getMostRecentEntry(uid)
         .subscribe(e => {
-          e.date = e.date.toDate();
           this.lastEntry = e;
         });
 
@@ -53,7 +52,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.unsubscribe),
         filter(e => !!e && e.length > 0),
-        map(e => e[0] as Entry)
+        map(e => {
+          const x = e[0];
+          x.date = x.date.toDate();
+          return x as Entry;
+        })
       );
   }
 
@@ -63,14 +66,17 @@ export class HomeComponent implements OnInit, OnDestroy {
       .valueChanges()
       .pipe(
         takeUntil(this.unsubscribe),
-        filter(e => !!e)
+        filter(e => !!e),
+        map(e => e.map(x => {
+          x.date = x.date.toDate();
+          return x;
+        }))
       ) as Observable<Entry[]>;
   }
 
   private formatOverviewData(entries: Entry[]): HmDatum[] {
     const newOverview: HmDatum[] = [];
     entries.forEach(e => {
-      e.date = e.date.toDate();
       const dateEntry = newOverview.find(x => x.date.getDate() === e.date.getDate());
       e.duration /= 1000;
       if (dateEntry) {

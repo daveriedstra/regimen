@@ -42,7 +42,7 @@ export class NewEntryComponent implements OnInit {
 
   back(e: Event) {
     e.preventDefault();
-    this.router.navigate(['..'])
+    this.router.navigate(['..']);
   }
 
   addEntry(form: NgForm) {
