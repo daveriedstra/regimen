@@ -1,0 +1,16 @@
+<div class="weekdays">
+  <span 
+    class="weekday"
+    *ngFor="let abbrev of weekdays"
+    [innerText]="abbrev"
+  ></span>
+</div>
+<div class="svg-container">
+  <svg 
+    class="visualizer-content"
+    viewBox="0 0 3000 1000"
+    preserveAspectRatio="xMinYMin meet"
+    width="3000"
+    height="1000"
+  ></svg>
+</div>

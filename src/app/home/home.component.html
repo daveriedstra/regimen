@@ -23,10 +23,8 @@
 </div>
 
 <div class="overview">
-  <calendar-heatmap
+  <app-visualizer
     *ngIf="overviewData?.length > 0"
     [data]="overviewData"
-    overview="month"
-    color="#3F4E51"
-  ></calendar-heatmap>
+  ></app-visualizer>
 </div>

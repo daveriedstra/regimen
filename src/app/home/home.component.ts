@@ -4,6 +4,7 @@ import { AngularFirestore, CollectionReference, Query } from '@angular/fire/fire
 import { AngularFireAuth } from '@angular/fire/auth';
 import { take, takeUntil, map, filter } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
+import DateEntries from '../models/date-entries.interface';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +13,7 @@ import { Observable, Subject } from 'rxjs';
 })
 export class HomeComponent implements OnInit, OnDestroy {
   lastEntry: Entry;
-  overviewData: HmDatum[] = [];
+  overviewData: DateEntries[] = [];
   unsubscribe: Subject<void>;
 
   constructor(
@@ -35,7 +36,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.getThisMonthsEntries(uid)
         .subscribe((entries: Entry[]) => {
           this.overviewData = this.formatOverviewData(entries);
-          this.fixSvg();
         });
     });
   }
@@ -74,38 +74,20 @@ export class HomeComponent implements OnInit, OnDestroy {
       ) as Observable<Entry[]>;
   }
 
-  private formatOverviewData(entries: Entry[]): HmDatum[] {
-    const newOverview: HmDatum[] = [];
+  private formatOverviewData(entries: Entry[]): DateEntries[] {
+    const newOverview: DateEntries[] = [];
     entries.forEach(e => {
       const dateEntry = newOverview.find(x => x.date.getDate() === e.date.getDate());
       e.duration /= 1000;
       if (dateEntry) {
         // consolidate new entry with existing
-        dateEntry.total += e.duration;
-        dateEntry.details.push(this.entryToDetails(e));
+        dateEntry.totalDuration += e.duration;
+        dateEntry.entries.push(e);
       } else {
-        newOverview.push(this.entryToDatum(e));
+        newOverview.push(this.entryToDateEntries(e));
       }
     });
     return newOverview;
-  }
-
-  /**
-   * not great to mess with the DOM directly,
-   * but this heatmap widget is not great either...
-   */
-  private fixSvg() {
-    setTimeout(() => {
-      const cal = document.getElementsByTagName('calendar-heatmap')[0];
-      if (!cal) {
-        return;
-      }
-      const svg = cal.getElementsByTagName('svg')[0];
-
-      const w = svg.getAttribute('width'),
-        h = svg.getAttribute('height');
-      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
-    }, 0);
   }
 
   private todayFilter(ref: CollectionReference): Query {
@@ -120,31 +102,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       .where('date', '>=', today);
   }
 
-  private entryToDatum(e: Entry): HmDatum {
+  private entryToDateEntries(e: Entry): DateEntries {
     return {
       date: e.date,
-      total: e.duration,
-      details: [this.entryToDetails(e)]
+      totalDuration: e.duration,
+      entries: [e]
     };
   }
-
-  private entryToDetails(e: Entry): HmDetails {
-    return {
-      name: e.description,
-      date: e.date,
-      value: e.duration
-    };
-  }
-}
-
-interface HmDatum {
-  date: Date;
-  total: number;
-  details: HmDetails[];
-}
-
-interface HmDetails {
-  name: string;
-  date: Date;
-  value: number;
 }

@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { FormsModule } from '@angular/forms';
-import { CalendarHeatmap } from 'angular2-calendar-heatmap';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,6 +22,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { The404Component } from './the404/the404.component';
 import { PrivacyComponent } from './privacy/privacy.component';
+import { VisualizerComponent } from './visualizer/visualizer.component';
 
 @NgModule({
   declarations: [
@@ -36,11 +36,11 @@ import { PrivacyComponent } from './privacy/privacy.component';
     MinValidator,
     MaxValidator,
     NewlinePipe,
-    CalendarHeatmap,
     HeaderComponent,
     FooterComponent,
     The404Component,
-    PrivacyComponent
+    PrivacyComponent,
+    VisualizerComponent
   ],
   imports: [
     BrowserModule,

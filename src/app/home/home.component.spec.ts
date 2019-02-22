@@ -6,7 +6,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { FakeAfAuth } from '../../mocks/fakeafauth';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { NewlinePipe } from '../newline.pipe';
-import { CalendarHeatmap } from 'angular2-calendar-heatmap';
+import { VisualizerComponent } from '../visualizer/visualizer.component';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -21,7 +21,7 @@ describe('HomeComponent', () => {
       declarations: [
         HomeComponent,
         NewlinePipe,
-        CalendarHeatmap
+        VisualizerComponent
       ],
       providers: [
         { provide: AngularFireAuth, useValue: fakeAfAuth },
