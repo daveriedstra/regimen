@@ -32,3 +32,8 @@
 ::ng-deep .today--dark .indicator {
   stroke: white;
 }
+
+::ng-deep .pre-dates,
+::ng-deep .post-dates {
+  fill-opacity: 0.1;
+}

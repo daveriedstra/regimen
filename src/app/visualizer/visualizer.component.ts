@@ -1,7 +1,6 @@
 import { Component, OnInit, AfterContentInit, Input, OnChanges, SimpleChange, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import * as d3 from 'd3';
 import generateDummyData from './generateDummyData';
-import { Entry } from '../models/entry.model';
 import DateEntries from '../models/date-entries.interface';
 
 @Component({
@@ -14,7 +13,7 @@ export class VisualizerComponent implements OnInit, AfterContentInit, OnChanges 
   data: DateEntries[]; // = generateDummyData();
 
   today = new Date();
-  weekdays = ['M', 'Tu', 'W', 'Th', 'F', 'Sa', 'Su'];
+  weekdays = ['Su', 'M', 'Tu', 'W', 'Th', 'F', 'Sa'];
 
   width = 3000;
   height = 1000;
@@ -22,7 +21,7 @@ export class VisualizerComponent implements OnInit, AfterContentInit, OnChanges 
   firstWeekLength: number;
 
   colWidth = this.width / 7;
-  rowWidth = this.height / 4;
+  rowWidth = this.height / 5;
   datumRadius = Math.min(this.colWidth, this.rowWidth) / 2 - this.datumPadding;
 
   constructor() { }
@@ -58,7 +57,7 @@ export class VisualizerComponent implements OnInit, AfterContentInit, OnChanges 
       .attr('r', this.datumRadius)
       .attr('cx', d => this.getEntryXPos(d))
       .attr('cy', d => this.getEntryYPos(d))
-      .attr('fill-opacity', (d: DateEntries) => d.totalDuration / maxDuration)
+      .attr('fill-opacity', (d: DateEntries) => d.totalDuration / maxDuration);
 
     // today indicator
     dates.filter((d: DateEntries) => d.date.getDate() === this.today.getDate())
@@ -71,6 +70,38 @@ export class VisualizerComponent implements OnInit, AfterContentInit, OnChanges 
         .attr('cx', d => this.getEntryXPos(d))
         .attr('cy', d => this.getEntryYPos(d))
         .attr('class', 'indicator');
+
+    // out-of-month indicators
+    const preDates = 7 - this.firstWeekLength;
+
+    const lastOfMonth = new Date(this.data[0].date);
+    // get last date by setting date to 0 of next month
+    if (lastOfMonth.getMonth() === 11) {
+      // roll over to new year
+      lastOfMonth.setFullYear(lastOfMonth.getFullYear() + 1, 0, 0);
+    } else {
+      // regular method
+      lastOfMonth.setMonth(lastOfMonth.getMonth() + 1, 0);
+    }
+    const postDates = 6 - lastOfMonth.getDay();
+
+    svg.append('rect')
+      .attr('class', 'pre-dates')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('rx', 25)
+      .attr('ry', 25)
+      .attr('width', this.colWidth * preDates)
+      .attr('height', this.rowWidth);
+
+    svg.append('rect')
+      .attr('class', 'post-dates')
+      .attr('x', this.colWidth * (lastOfMonth.getDay() + 1))
+      .attr('y', this.height - this.rowWidth)
+      .attr('rx', 25)
+      .attr('ry', 25)
+      .attr('width', this.colWidth * postDates)
+      .attr('height', this.rowWidth);
   }
 
   /**
