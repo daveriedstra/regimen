@@ -1,3 +1,26 @@
+.controls {
+  display: block;
+  position: relative;
+  text-align: center;
+}
+
+.control-button {
+  position: absolute;
+  font-size: 0.8rem;
+}
+
+.control-button--previous {
+  left: 0;
+}
+
+.control-button--next {
+  right: 0;
+}
+
+.controls .label {
+  font-weight: bold;
+}
+
 .weekday {
   display: inline-block;
   text-align: center;
@@ -22,14 +45,14 @@
   height: auto;
 }
 
-::ng-deep .today .indicator {
+::ng-deep .today {
   stroke: black;
   stroke-width: 0.8rem;
   stroke-opacity: 0.7;
   fill-opacity: 0;
 }
 
-::ng-deep .today--dark .indicator {
+::ng-deep .today--dark {
   stroke: white;
 }
 

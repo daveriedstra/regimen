@@ -1,3 +1,18 @@
+<div class="controls">
+  <a
+    href="#"
+    (click)="onPrevMonth(); $event.preventDefault()"
+    class="control-button control-button--previous"
+  >« previous month</a>
+  <label
+    class="label"
+  >{{stagedMonth | date : 'MMMM yyyy'}}</label>
+  <a
+    href="#"
+    (click)="onNextMonth(); $event.preventDefault()"
+    class="control-button control-button--next"
+  >next month »</a>
+</div>
 <div class="weekdays">
   <span 
     class="weekday input-label"
@@ -12,5 +27,8 @@
     preserveAspectRatio="xMinYMin meet"
     width="3000"
     height="1000"
-  ></svg>
+  >
+    <g class="dates"></g>
+    <g class="bounds"></g>
+  </svg>
 </div>
