@@ -1,6 +1,14 @@
-import { Component, OnInit, AfterContentInit, Input, OnChanges, SimpleChange, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterContentInit,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  Output,
+  EventEmitter
+} from '@angular/core';
 import * as d3 from 'd3';
-import generateDummyData from './generateDummyData';
 import DateEntries from '../models/date-entries.interface';
 
 @Component({
@@ -11,6 +19,9 @@ import DateEntries from '../models/date-entries.interface';
 export class VisualizerComponent implements OnInit, AfterContentInit, OnChanges {
   @Input()
   data: DateEntries[];
+
+  @Output()
+  dateSelected = new EventEmitter();
 
   today = new Date();
   stagedMonth = new Date();
@@ -63,7 +74,9 @@ export class VisualizerComponent implements OnInit, AfterContentInit, OnChanges 
     dates.attr('r', this.datumRadius)
       .attr('cx', d => this.getEntryXPos(d))
       .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
-      .attr('fill-opacity', d => d.totalDuration / maxDuration);
+      .attr('fill-opacity', d => d.totalDuration / maxDuration)
+      .classed('date', true)
+      .on('click', this.onDateClick.bind(this));
 
     // today indicator
     dates.filter(d => d.date.getDate() === this.today.getDate())
@@ -71,6 +84,7 @@ export class VisualizerComponent implements OnInit, AfterContentInit, OnChanges 
       .attr('cx', d => this.getEntryXPos(d))
       .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
       .classed('today', true)
+      .classed('today--empty', d => d.totalDuration < 1)
       .classed('today--dark', d => d.totalDuration / maxDuration > 0.4);
 
     // out-of-month indicators
@@ -110,6 +124,12 @@ export class VisualizerComponent implements OnInit, AfterContentInit, OnChanges 
   onNextMonth() {
     this.stagedMonth = this.getNextMonth(this.stagedMonth);
     this.drawCalendar();
+  }
+
+  onDateClick(d: DateEntries) {
+    if (d.entries.length > 0) {
+      this.dateSelected.emit(d);
+    }
   }
 
   /**

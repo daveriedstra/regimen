@@ -12,7 +12,7 @@ import DateEntries from '../models/date-entries.interface';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  lastEntry: Entry;
+  stagedEntry: Entry;
   overviewData: DateEntries[] = [];
   unsubscribe: Subject<void>;
 
@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       this.getMostRecentEntry(uid)
         .subscribe(e => {
-          this.lastEntry = e;
+          this.stagedEntry = e;
         });
 
       this.getThisMonthsEntries(uid)
@@ -43,6 +43,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  onDateSelected(d: DateEntries) {
+    this.stagedEntry = this.dateEntriesToEntry(d);
   }
 
   private getMostRecentEntry(uid: string): Observable<Entry> {
@@ -108,5 +112,35 @@ export class HomeComponent implements OnInit, OnDestroy {
       totalDuration: e.duration,
       entries: [e]
     };
+  }
+
+  private dateEntriesToEntry(d: DateEntries): Entry {
+    const initial: Entry = {
+      duration: d.totalDuration,
+      description: '',
+      note: '',
+      date: d.date
+    };
+
+    // This reducer just makes a nice concatenation
+    // of the entry string properties; the other data is
+    // gleaned from the parent DateEntries.
+    return d.entries.reduce((a, b) => {
+      a.note = this.niceConcat(a.note, b.note);
+      a.description = this.niceConcat(a.description, b.description);
+
+      return a;
+    }, initial);
+  }
+
+  private niceConcat(a: string, b: string): string {
+    a = a.trim();
+    b = b.trim();
+
+    if (a.length) {
+      return `${a}\n--\n${b}`;
+    }
+
+    return b;
   }
 }

@@ -45,6 +45,10 @@
   height: auto;
 }
 
+::ng-deep .date:not(.today--empty) {
+  cursor: pointer;
+}
+
 ::ng-deep .today {
   stroke: black;
   stroke-width: 0.8rem;

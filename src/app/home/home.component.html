@@ -1,9 +1,9 @@
 <div class="note">
-  <ng-container *ngIf="lastEntry; else noentry">
-    <p class="input-label note__date"><time>{{lastEntry.date | date : 'fullDate'}}</time>:</p>
+  <ng-container *ngIf="stagedEntry; else noentry">
+    <p class="input-label note__date"><time>{{stagedEntry.date | date : 'fullDate'}}</time>:</p>
     <div 
       class="note__content"
-      [innerHtml]="lastEntry.note | newline"
+      [innerHtml]="stagedEntry.note | newline"
     ></div>
   </ng-container>
 
@@ -26,5 +26,6 @@
   <app-visualizer
     *ngIf="overviewData?.length > 0"
     [data]="overviewData"
+    (dateSelected)="onDateSelected($event)"
   ></app-visualizer>
 </div>
