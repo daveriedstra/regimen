@@ -1,5 +1,5 @@
-import { FakeAfstoreDoc } from "./fake-afstore-doc";
-import { FakeAfstoreColl } from "./fake-afstore-coll";
+import { FakeAfstoreDoc } from './fake-afstore-doc';
+import { FakeAfstoreColl } from './fake-afstore-coll';
 
 export class FakeAfstore {
   docToReturn = new FakeAfstoreDoc();

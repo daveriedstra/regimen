@@ -10,7 +10,7 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void>;
+  private unsubscribe: Subject<void> = new Subject();
   loggedIn = false;
 
   constructor(
@@ -18,7 +18,6 @@ export class FooterComponent implements OnInit, OnDestroy {
     private auth: AngularFireAuth) { }
 
   ngOnInit() {
-    this.unsubscribe = new Subject();
     this.auth.authState.pipe(
       takeUntil(this.unsubscribe)
     ).subscribe(u => {
