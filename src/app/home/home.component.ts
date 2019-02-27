@@ -26,16 +26,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.afAuth.user.pipe(
       take(1)
     ).subscribe(u => {
-      const uid = u.uid;
-
-      this.getMostRecentEntry(uid)
-        .subscribe(e => {
-          this.stagedEntry = e;
-        });
-
-      this.getThisMonthsEntries(uid)
+      this.getThisMonthsEntries(u.uid)
         .subscribe((entries: Entry[]) => {
           this.overviewData = this.formatOverviewData(entries);
+          this.onDateSelected(this.getTodayEntries(this.overviewData));
         });
     });
   }
@@ -49,19 +43,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.stagedEntry = this.dateEntriesToEntry(d);
   }
 
-  private getMostRecentEntry(uid: string): Observable<Entry> {
-    return this.afstore.doc(`entries/${uid}`)
-      .collection('entries', r => this.todayFilter(r))
-      .valueChanges()
-      .pipe(
-        takeUntil(this.unsubscribe),
-        filter(e => !!e && e.length > 0),
-        map(e => {
-          const x = e[0];
-          x.date = x.date.toDate();
-          return x as Entry;
-        })
-      );
+  getTodayEntries(entries: DateEntries[]): DateEntries {
+    const todayDate = (new Date()).getDate();
+    return entries.find(d => {
+      const isToday = d.date.getDate() === todayDate;
+      return isToday && !d.isTodayMarker;
+    });
+
   }
 
   private getThisMonthsEntries(uid: string): Observable<Entry[]> {
@@ -100,10 +88,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private monthFilter(ref: CollectionReference): Query {
-    const today = new Date();
-    today.setMonth(today.getMonth() - 1);
+    const firstOfMonth = new Date();
+    firstOfMonth.setDate(1);
+    firstOfMonth.setHours(0, 0, 0, 0);
     return ref.orderBy('date', 'desc')
-      .where('date', '>=', today);
+      .where('date', '>=', firstOfMonth);
   }
 
   private entryToDateEntries(e: Entry): DateEntries {
