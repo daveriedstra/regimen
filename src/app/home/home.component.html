@@ -24,8 +24,10 @@
 
 <div class="overview">
   <app-visualizer
-    *ngIf="overviewData?.length > 0"
+    *ngIf="overviewData"
     [data]="overviewData"
     (dateSelected)="onDateSelected($event)"
+    (prevMonth)="onMonthChange($event)"
+    (nextMonth)="onMonthChange($event)"
   ></app-visualizer>
 </div>

@@ -1,7 +1,6 @@
 import {
   Component,
   OnInit,
-  AfterContentInit,
   Input,
   OnChanges,
   SimpleChanges,
@@ -16,12 +15,18 @@ import DateEntries from '../models/date-entries.interface';
   templateUrl: './visualizer.component.html',
   styleUrls: ['./visualizer.component.scss']
 })
-export class VisualizerComponent implements OnInit, AfterContentInit, OnChanges {
+export class VisualizerComponent implements OnInit, OnChanges {
   @Input()
   data: DateEntries[];
 
   @Output()
   dateSelected = new EventEmitter();
+
+  @Output()
+  prevMonth = new EventEmitter();
+
+  @Output()
+  nextMonth = new EventEmitter();
 
   today = new Date();
   stagedMonth = new Date();
@@ -40,15 +45,10 @@ export class VisualizerComponent implements OnInit, AfterContentInit, OnChanges 
   ngOnInit() {
   }
 
-  ngAfterContentInit() {
-    if (this.data) {
-      this.drawCalendar();
-    }
-  }
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes['data']) {
       this.data = this.ensureDataHasTodayMarker(this.data);
+      this.drawCalendar();
     }
   }
 
@@ -76,11 +76,13 @@ export class VisualizerComponent implements OnInit, AfterContentInit, OnChanges 
       .join('circle');
 
     // all data
-    dates.attr('r', this.datumRadius)
+    dates.filter(d => !d.isTodayMarker)
+      .attr('r', this.datumRadius)
       .attr('cx', d => this.getEntryXPos(d))
       .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
       .attr('fill-opacity', d => d.totalDuration / maxDuration)
       .classed('date', true)
+      .classed('today', false)
       .on('click', this.onDateClick.bind(this));
 
     // today indicator
@@ -89,8 +91,8 @@ export class VisualizerComponent implements OnInit, AfterContentInit, OnChanges 
       .attr('cx', d => this.getEntryXPos(d))
       .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
       .classed('today', true)
-      .classed('today--empty', d => todayData.totalDuration < 1)
-      .classed('today--dark', d => todayData.totalDuration / maxDuration > 0.4)
+      .classed('today--empty', d => !todayData || todayData.totalDuration < 1)
+      .classed('today--dark', d => !!todayData && todayData.totalDuration / maxDuration > 0.4)
       .on('click', this.onDateClick.bind(this, todayData));
 
     // out-of-month indicators
@@ -124,12 +126,12 @@ export class VisualizerComponent implements OnInit, AfterContentInit, OnChanges 
 
   onPrevMonth() {
     this.stagedMonth = this.getPreviousMonth(this.stagedMonth);
-    this.drawCalendar();
+    this.prevMonth.emit(this.stagedMonth.getMonth());
   }
 
   onNextMonth() {
     this.stagedMonth = this.getNextMonth(this.stagedMonth);
-    this.drawCalendar();
+    this.nextMonth.emit(this.stagedMonth.getMonth());
   }
 
   onDateClick(d: DateEntries) {

@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Entry } from '../models/entry.model';
-import { AngularFirestore, CollectionReference, Query } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { take, takeUntil, map, filter } from 'rxjs/operators';
+import { take, map, filter } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
 import DateEntries from '../models/date-entries.interface';
 
@@ -15,6 +15,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   stagedEntry: Entry;
   overviewData: DateEntries[] = [];
   unsubscribe: Subject<void>;
+  private uid: string;
 
   constructor(
     private afstore: AngularFirestore,
@@ -26,7 +27,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.afAuth.user.pipe(
       take(1)
     ).subscribe(u => {
-      this.getThisMonthsEntries(u.uid)
+      this.uid = u.uid;
+      this.getEntriesForMonth(u.uid, this.getFirstOfMonth())
         .subscribe((entries: Entry[]) => {
           this.overviewData = this.formatOverviewData(entries);
           this.onDateSelected(this.getTodayEntries(this.overviewData));
@@ -43,21 +45,35 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.stagedEntry = this.dateEntriesToEntry(d);
   }
 
-  getTodayEntries(entries: DateEntries[]): DateEntries {
+  onMonthChange(newMonth: number) {
+    this.getEntriesForMonth(this.uid, this.getFirstOfMonth(newMonth))
+      .subscribe(entries => this.overviewData = this.formatOverviewData(entries));
+  }
+
+  /**
+   * @todo Fix -- this should be most recent lte today, not just today!
+   */
+  private getTodayEntries(entries: DateEntries[]): DateEntries {
     const todayDate = (new Date()).getDate();
     return entries.find(d => {
       const isToday = d.date.getDate() === todayDate;
       return isToday && !d.isTodayMarker;
     });
-
   }
 
-  private getThisMonthsEntries(uid: string): Observable<Entry[]> {
+  private getEntriesForMonth(uid: string, firstOfMonth: Date): Observable<Entry[]> {
+    const lastOfMonth = new Date(firstOfMonth);
+    lastOfMonth.setMonth(lastOfMonth.getMonth() + 1, 0);
+    lastOfMonth.setHours(23, 59, 59);
     return this.afstore.doc(`entries/${uid}`)
-      .collection('entries', r => this.monthFilter(r))
+      .collection('entries', r => {
+        return r.orderBy('date', 'desc')
+          .where('date', '>=', firstOfMonth)
+          .where('date', '<=', lastOfMonth);
+      })
       .valueChanges()
       .pipe(
-        takeUntil(this.unsubscribe),
+        take(1),
         filter(e => !!e),
         map(e => e.map(x => {
           x.date = x.date.toDate();
@@ -80,19 +96,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     });
     return newOverview;
-  }
-
-  private todayFilter(ref: CollectionReference): Query {
-    return ref.orderBy('date', 'desc')
-      .limit(1);
-  }
-
-  private monthFilter(ref: CollectionReference): Query {
-    const firstOfMonth = new Date();
-    firstOfMonth.setDate(1);
-    firstOfMonth.setHours(0, 0, 0, 0);
-    return ref.orderBy('date', 'desc')
-      .where('date', '>=', firstOfMonth);
   }
 
   private entryToDateEntries(e: Entry): DateEntries {
@@ -131,5 +134,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     return b;
+  }
+
+  private getFirstOfMonth(month: number = (new Date()).getMonth(), year = (new Date()).getFullYear()): Date {
+    return new Date(year, month, 1, 0, 0, 0, 0);
   }
 }
