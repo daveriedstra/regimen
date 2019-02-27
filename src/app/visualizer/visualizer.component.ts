@@ -48,7 +48,7 @@ export class VisualizerComponent implements OnInit, AfterContentInit, OnChanges 
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['data']) {
-      this.data = this.ensureDataHasToday(this.data);
+      this.data = this.ensureDataHasTodayMarker(this.data);
     }
   }
 
@@ -60,6 +60,11 @@ export class VisualizerComponent implements OnInit, AfterContentInit, OnChanges 
         &&
         d.date.getFullYear() === this.stagedMonth.getFullYear()
       );
+    });
+    const todayDate = this.today.getDate();
+    const todayData = displayedData.find(d => {
+      const isToday = d.date.getDate() === todayDate;
+      return isToday && !d.isTodayMarker;
     });
     const maxDuration = displayedData.map(e => e.totalDuration)
       .reduce((prev, cur) => Math.max(prev, cur), 0);
@@ -79,13 +84,14 @@ export class VisualizerComponent implements OnInit, AfterContentInit, OnChanges 
       .on('click', this.onDateClick.bind(this));
 
     // today indicator
-    dates.filter(d => d.date.getDate() === this.today.getDate())
+    dates.filter(d => d.isTodayMarker)
       .attr('r', this.datumRadius - 0.3 * this.datumRadius)
       .attr('cx', d => this.getEntryXPos(d))
       .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
       .classed('today', true)
-      .classed('today--empty', d => d.totalDuration < 1)
-      .classed('today--dark', d => d.totalDuration / maxDuration > 0.4);
+      .classed('today--empty', d => todayData.totalDuration < 1)
+      .classed('today--dark', d => todayData.totalDuration / maxDuration > 0.4)
+      .on('click', this.onDateClick.bind(this, todayData));
 
     // out-of-month indicators
     const lastOfMonth = this.getLastDayOfMonth(this.stagedMonth);
@@ -154,18 +160,18 @@ export class VisualizerComponent implements OnInit, AfterContentInit, OnChanges 
    * if the month is different; it will just be filtered out.
    * @param d data
    */
-  private ensureDataHasToday(d: DateEntries[]): DateEntries[] {
-    const todayData = d.find(x => x.date.getDate() === this.today.getDate());
-
-    if (!todayData) {
-      d.push({
-        date: new Date(),
-        totalDuration: 0,
-        entries: []
-      });
+  private ensureDataHasTodayMarker(d: DateEntries[]): DateEntries[] {
+    if (d.find(e => e.isTodayMarker)) {
+      return d;
     }
 
-    return d;
+    const todayMarker = {
+      date: new Date(),
+      totalDuration: 0,
+      entries: [],
+      isTodayMarker: true
+    };
+    return [...d, todayMarker];
   }
 
   //
