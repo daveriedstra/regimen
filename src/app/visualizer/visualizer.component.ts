@@ -90,7 +90,7 @@ export class VisualizerComponent implements OnInit, OnChanges {
       .attr('r', this.datumRadius - 0.3 * this.datumRadius)
       .attr('cx', d => this.getEntryXPos(d))
       .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
-      .classed('today', true)
+      .classed('today date', true)
       .classed('today--empty', d => !todayData || todayData.totalDuration < 1)
       .classed('today--dark', d => !!todayData && todayData.totalDuration / maxDuration > 0.4)
       .on('click', this.onDateClick.bind(this, todayData));

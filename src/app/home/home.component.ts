@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.getEntriesForMonth(u.uid, this.getFirstOfMonth())
         .subscribe((entries: Entry[]) => {
           this.overviewData = this.formatOverviewData(entries);
-          this.onDateSelected(this.getTodayEntries(this.overviewData));
+          this.onDateSelected(this.getMostRecentEntries(this.overviewData));
         });
     });
   }
@@ -50,15 +50,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       .subscribe(entries => this.overviewData = this.formatOverviewData(entries));
   }
 
-  /**
-   * @todo Fix -- this should be most recent lte today, not just today!
-   */
-  private getTodayEntries(entries: DateEntries[]): DateEntries {
+  private getMostRecentEntries(entries: DateEntries[]): DateEntries {
     const todayDate = (new Date()).getDate();
-    return entries.find(d => {
-      const isToday = d.date.getDate() === todayDate;
-      return isToday && !d.isTodayMarker;
-    });
+    return entries.filter(d => d.date.getDate() <= todayDate && !d.isTodayMarker)
+      .sort((a, b) => a.date > b.date ? -1 : 1)[0];
   }
 
   private getEntriesForMonth(uid: string, firstOfMonth: Date): Observable<Entry[]> {
