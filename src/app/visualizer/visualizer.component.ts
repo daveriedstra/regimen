@@ -1,6 +1,5 @@
 import {
   Component,
-  OnInit,
   Input,
   OnChanges,
   SimpleChanges,
@@ -15,7 +14,7 @@ import DateEntries from '../models/date-entries.interface';
   templateUrl: './visualizer.component.html',
   styleUrls: ['./visualizer.component.scss']
 })
-export class VisualizerComponent implements OnInit, OnChanges {
+export class VisualizerComponent implements OnChanges {
   @Input()
   data: DateEntries[];
 
@@ -42,19 +41,34 @@ export class VisualizerComponent implements OnInit, OnChanges {
 
   constructor() { }
 
-  ngOnInit() {
-  }
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes['data']) {
-      this.data = this.ensureDataHasTodayMarker(this.data);
-      this.drawCalendar();
+      this.draw(changes['data'].currentValue);
     }
   }
 
-  drawCalendar() {
+  onPrevMonth() {
+    this.stagedMonth = this.getPreviousMonth(this.stagedMonth);
+    this.prevMonth.emit(this.stagedMonth.getMonth());
+  }
+
+  onNextMonth() {
+    this.stagedMonth = this.getNextMonth(this.stagedMonth);
+    this.nextMonth.emit(this.stagedMonth.getMonth());
+  }
+
+  onDateClick(d: DateEntries) {
+    if (d.entries.length > 0) {
+      this.dateSelected.emit(d);
+    }
+  }
+
+  /**
+   * Draws the calendar data visualization
+   */
+  draw(data: DateEntries[]) {
     const svg = d3.select('.visualizer-content');
-    const displayedData = this.data.filter(d => {
+    const displayedData = data.filter(d => {
       return (
         d.date.getMonth() === this.stagedMonth.getMonth()
         &&
@@ -70,6 +84,15 @@ export class VisualizerComponent implements OnInit, OnChanges {
       .reduce((prev, cur) => Math.max(prev, cur), 0);
     const firstWeekLength = this.getFirstWeekLength(this.stagedMonth);
 
+    this.renderDates({ svg, displayedData, firstWeekLength, maxDuration });
+    this.renderTodayMarker({ svg, todayData, firstWeekLength, maxDuration });
+    this.renderBounds({ svg, firstWeekLength });
+  }
+
+  /**
+   * Renders the date entry data
+   */
+  private renderDates({ svg, displayedData, firstWeekLength, maxDuration }) {
     const dates = svg.select('.dates')
       .selectAll('circle')
       .data(displayedData)
@@ -82,20 +105,42 @@ export class VisualizerComponent implements OnInit, OnChanges {
       .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
       .attr('fill-opacity', d => d.totalDuration / maxDuration)
       .classed('date', true)
-      .classed('today', false)
       .on('click', this.onDateClick.bind(this));
+  }
 
-    // today indicator
-    dates.filter(d => d.isTodayMarker)
-      .attr('r', this.datumRadius - 0.3 * this.datumRadius)
-      .attr('cx', d => this.getEntryXPos(d))
-      .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
-      .classed('today date', true)
-      .classed('today--empty', d => !todayData || todayData.totalDuration < 1)
-      .classed('today--dark', d => !!todayData && todayData.totalDuration / maxDuration > 0.4)
-      .on('click', this.onDateClick.bind(this, todayData));
+  /**
+   * Renders the today marker
+   */
+  private renderTodayMarker({ svg, todayData, firstWeekLength, maxDuration }) {
+    const inMonth = (
+      this.stagedMonth.getMonth() === this.today.getMonth()
+      &&
+      this.stagedMonth.getFullYear() === this.today.getFullYear()
+    );
 
-    // out-of-month indicators
+    const todayMarker = [{
+      date: new Date(),
+      totalDuration: 0,
+      entries: [],
+      isTodayMarker: true
+    }].filter(d => inMonth);
+
+    svg.selectAll('circle.today')
+      .data(todayMarker)
+      .join('circle')
+        .attr('r', this.datumRadius - 0.3 * this.datumRadius)
+        .attr('cx', d => this.getEntryXPos(d))
+        .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
+        .classed('today date', true)
+        .classed('today--empty', d => !todayData || todayData.totalDuration < 1)
+        .classed('today--dark', d => !!todayData && todayData.totalDuration / maxDuration > 0.4)
+        .on('click', this.onDateClick.bind(this, todayData));
+  }
+
+  /**
+   * Renders the boundaries of the month (and non-month-days)
+   */
+  private renderBounds({ svg, firstWeekLength }) {
     const lastOfMonth = this.getLastDayOfMonth(this.stagedMonth);
     const preDates = 7 - firstWeekLength;
     const postDates = 6 - lastOfMonth.getDay();
@@ -122,22 +167,6 @@ export class VisualizerComponent implements OnInit, OnChanges {
         .attr('ry', 25)
         .attr('width', d => this.colWidth * d)
         .attr('height', this.rowWidth);
-  }
-
-  onPrevMonth() {
-    this.stagedMonth = this.getPreviousMonth(this.stagedMonth);
-    this.prevMonth.emit(this.stagedMonth.getMonth());
-  }
-
-  onNextMonth() {
-    this.stagedMonth = this.getNextMonth(this.stagedMonth);
-    this.nextMonth.emit(this.stagedMonth.getMonth());
-  }
-
-  onDateClick(d: DateEntries) {
-    if (d.entries.length > 0) {
-      this.dateSelected.emit(d);
-    }
   }
 
   /**
