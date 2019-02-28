@@ -221,14 +221,7 @@ export class VisualizerComponent implements OnChanges {
    */
   private getLastDayOfMonth(d: Date): Date {
     const lastOfMonth = new Date(d);
-    // get last date by setting date to 0 of next month
-    if (lastOfMonth.getMonth() === 11) {
-      // roll over to new year
-      lastOfMonth.setFullYear(lastOfMonth.getFullYear() + 1, 0, 0);
-    } else {
-      // regular method
-      lastOfMonth.setMonth(lastOfMonth.getMonth() + 1, 0);
-    }
+    lastOfMonth.setMonth(lastOfMonth.getMonth() + 1, 0);
     return lastOfMonth;
   }
 
@@ -237,14 +230,9 @@ export class VisualizerComponent implements OnChanges {
    * @param d a date in the month after the returned Date
    */
   private getPreviousMonth(d: Date): Date {
-    const currentMonth = d.getMonth();
-    let t: number;
-    if (currentMonth === 0) {
-      t = d.setFullYear(d.getFullYear() - 1, 11);
-    } else {
-      t = d.setMonth(currentMonth - 1);
-    }
-    return new Date(t);
+    const prevMonth = new Date(d);
+    prevMonth.setMonth(prevMonth.getMonth() - 1);
+    return prevMonth;
   }
 
   /**
@@ -252,13 +240,8 @@ export class VisualizerComponent implements OnChanges {
    * @param d a date in the month before the returned date
    */
   private getNextMonth(d: Date): Date {
-    const currentMonth = d.getMonth();
-    let t: number;
-    if (currentMonth === 11) {
-      t = d.setFullYear(d.getFullYear() + 1, 0);
-    } else {
-      t = d.setMonth(currentMonth + 1);
-    }
-    return new Date(t);
+    const nextMonth = new Date(d);
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
+    return nextMonth;
   }
 }
