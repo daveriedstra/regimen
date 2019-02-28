@@ -54,21 +54,27 @@ describe('VisualizerComponent', () => {
   });
 
   it('#onPrevMonth should stage the previous month', () => {
-    const currentMonth = new Date(component.stagedMonth);
-    currentMonth.setMonth(currentMonth.getMonth() - 1);
-    component.onPrevMonth();
+    // test a full year
+    for (let i = 0; i < 13; i++) {
+      const currentMonth = new Date(component.stagedMonth);
+      currentMonth.setMonth(currentMonth.getMonth() - 1);
+      component.onPrevMonth();
 
-    expect(component.stagedMonth.getMonth()).toEqual(currentMonth.getMonth());
-    expect(component.stagedMonth.getFullYear()).toEqual(currentMonth.getFullYear());
+      expect(component.stagedMonth.getMonth()).toEqual(currentMonth.getMonth());
+      expect(component.stagedMonth.getFullYear()).toEqual(currentMonth.getFullYear());
+    }
   });
 
   it('#onNextMonth should stage the next month', () => {
-    const currentMonth = new Date(component.stagedMonth);
-    currentMonth.setMonth(currentMonth.getMonth() + 1);
-    component.onNextMonth();
+    // test a full year
+    for (let i = 0; i < 13; i++) {
+      const currentMonth = new Date(component.stagedMonth);
+      currentMonth.setMonth(currentMonth.getMonth() + 1);
+      component.onNextMonth();
 
-    expect(component.stagedMonth.getMonth()).toEqual(currentMonth.getMonth());
-    expect(component.stagedMonth.getFullYear()).toEqual(currentMonth.getFullYear());
+      expect(component.stagedMonth.getMonth()).toEqual(currentMonth.getMonth());
+      expect(component.stagedMonth.getFullYear()).toEqual(currentMonth.getFullYear());
+    }
   });
 
   it('should redraw the calendar when data is updated', () => {
