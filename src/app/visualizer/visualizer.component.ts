@@ -185,26 +185,6 @@ export class VisualizerComponent implements OnChanges {
     return this.getWeekForDate(e.date, firstWeekLength) * this.rowWidth + (0.5 * this.rowWidth);
   }
 
-  /**
-   * Ensures that the data has a datapoint representing today,
-   * even if there is no data for today. This is not a problem
-   * if the month is different; it will just be filtered out.
-   * @param d data
-   */
-  private ensureDataHasTodayMarker(d: DateEntries[]): DateEntries[] {
-    if (d.find(e => e.isTodayMarker)) {
-      return d;
-    }
-
-    const todayMarker = {
-      date: new Date(),
-      totalDuration: 0,
-      entries: [],
-      isTodayMarker: true
-    };
-    return [...d, todayMarker];
-  }
-
   //
   // Date utilities
   //
@@ -271,7 +251,7 @@ export class VisualizerComponent implements OnChanges {
    * returns a new Date in the month after the supplied date
    * @param d a date in the month before the returned date
    */
-  getNextMonth(d: Date): Date {
+  private getNextMonth(d: Date): Date {
     const currentMonth = d.getMonth();
     let t: number;
     if (currentMonth === 11) {
