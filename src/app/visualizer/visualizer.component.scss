@@ -45,8 +45,12 @@
   height: auto;
 }
 
-::ng-deep .date:not(.today--empty) {
+::ng-deep .dates g {
   cursor: pointer;
+}
+
+::ng-deep .click-target {
+  fill-opacity: 0;
 }
 
 ::ng-deep .today {

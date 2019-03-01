@@ -93,19 +93,35 @@ export class VisualizerComponent implements OnChanges {
    * Renders the date entry data
    */
   private renderDates({ svg, displayedData, firstWeekLength, maxDuration }) {
-    const dates = svg.select('.dates')
-      .selectAll('circle')
+    svg.select('.dates')
+      .selectAll('g')
       .data(displayedData)
-      .join('circle');
-
-    // all data
-    dates.filter(d => !d.isTodayMarker)
-      .attr('r', this.datumRadius)
-      .attr('cx', d => this.getEntryXPos(d))
-      .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
-      .attr('fill-opacity', d => d.totalDuration / maxDuration)
-      .classed('date', true)
-      .on('click', this.onDateClick.bind(this));
+      .join(
+        enter => {
+          const g = enter.append('g')
+            .on('click', this.onDateClick.bind(this));
+          g.append('circle')
+            .attr('r', this.datumRadius)
+            .attr('cx', d => this.getEntryXPos(d))
+            .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
+            .attr('fill-opacity', d => d.totalDuration / maxDuration)
+            .classed('date', true);
+          g.append('circle')
+            .attr('r', 2 * this.datumRadius)
+            .attr('cx', d => this.getEntryXPos(d))
+            .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
+            .classed('click-target', true);
+        },
+        update => {
+          update.select('circle.date')
+            .attr('cx', d => this.getEntryXPos(d))
+            .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
+            .attr('fill-opacity', d => d.totalDuration / maxDuration);
+          update.select('circle.click-target')
+            .attr('cx', d => this.getEntryXPos(d))
+            .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
+        }
+      );
   }
 
   /**
