@@ -39,6 +39,9 @@ export class VisualizerComponent implements OnChanges {
   rowWidth = this.height / 5;
   datumRadius = Math.min(this.colWidth, this.rowWidth) / 2 - this.datumPadding;
 
+  transitionDuration = 250;
+  transitionEasing = d3.easeSinInOut;
+
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -93,6 +96,8 @@ export class VisualizerComponent implements OnChanges {
    * Renders the date entry data
    */
   private renderDates({ svg, displayedData, firstWeekLength, maxDuration }) {
+    const transition = this.getTransition();
+
     svg.select('.dates')
       .selectAll('g')
       .data(displayedData)
@@ -101,25 +106,32 @@ export class VisualizerComponent implements OnChanges {
           const g = enter.append('g')
             .on('click', this.onDateClick.bind(this));
           g.append('circle')
+            .classed('date', true)
             .attr('r', this.datumRadius)
             .attr('cx', d => this.getEntryXPos(d))
             .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
-            .attr('fill-opacity', d => d.totalDuration / maxDuration)
-            .classed('date', true);
+            .attr('fill-opacity', d => d.totalDuration / maxDuration);
+
           g.append('circle')
             .attr('r', 2 * this.datumRadius)
             .attr('cx', d => this.getEntryXPos(d))
             .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
             .classed('click-target', true);
+
+          this.fadeIn(g, transition);
         },
         update => {
           update.select('circle.date')
-            .attr('cx', d => this.getEntryXPos(d))
-            .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
-            .attr('fill-opacity', d => d.totalDuration / maxDuration);
+            .transition(transition)
+              .attr('cx', d => this.getEntryXPos(d))
+              .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
+              .attr('fill-opacity', d => d.totalDuration / maxDuration);
           update.select('circle.click-target')
             .attr('cx', d => this.getEntryXPos(d))
-            .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
+            .attr('cy', d => this.getEntryYPos(d, firstWeekLength));
+        },
+        exit => {
+          this.fadeOutAndRemove(exit, transition);
         }
       );
   }
@@ -141,16 +153,27 @@ export class VisualizerComponent implements OnChanges {
       isTodayMarker: true
     }].filter(d => inMonth);
 
+    const transition = this.getTransition();
+
     svg.selectAll('circle.today')
       .data(todayMarker)
-      .join('circle')
-        .attr('r', this.datumRadius - 0.3 * this.datumRadius)
-        .attr('cx', d => this.getEntryXPos(d))
-        .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
-        .classed('today date', true)
-        .classed('today--empty', d => !todayData || todayData.totalDuration < 1)
-        .classed('today--dark', d => !!todayData && todayData.totalDuration / maxDuration > 0.4)
-        .on('click', this.onDateClick.bind(this, todayData));
+      .join(
+        enter => {
+          const circle = enter.append('circle')
+            .attr('r', this.datumRadius - 0.3 * this.datumRadius)
+            .attr('cx', d => this.getEntryXPos(d))
+            .attr('cy', d => this.getEntryYPos(d, firstWeekLength))
+            .classed('today date', true)
+            .classed('today--empty', d => !todayData || todayData.totalDuration < 1)
+            .classed('today--dark', d => !!todayData && todayData.totalDuration / maxDuration > 0.4)
+            .on('click', this.onDateClick.bind(this, todayData));
+          this.fadeIn(circle, transition);
+        },
+        update => {}, // never updated; only added or removed
+        exit => {
+          this.fadeOutAndRemove(exit, transition);
+        }
+      );
   }
 
   /**
@@ -199,6 +222,48 @@ export class VisualizerComponent implements OnChanges {
    */
   private getEntryYPos(e: DateEntries, firstWeekLength: number): number {
     return this.getWeekForDate(e.date, firstWeekLength) * this.rowWidth + (0.5 * this.rowWidth);
+  }
+
+  /**
+   * Generates a new d3 transition
+   */
+  private getTransition(): d3.Transition<HTMLElement, {}, null, undefined> {
+    return d3.transition()
+      .duration(this.transitionDuration)
+      .ease(this.transitionEasing);
+  }
+
+  /**
+   * Adds a fade-in transition to an element.
+   *
+   * @param el d3 selection to add the transition to
+   * @param t the transition to add
+   * @returns applied d3 transition
+   */
+  private fadeIn(
+    el: d3.Selection<HTMLElement, any, any, any>,
+    t: d3.Transition<HTMLElement, any, any, any>
+  ): d3.Transition<HTMLElement, any, any, any> {
+    return el.attr('opacity', 0)
+      .transition(t)
+      .attr('opacity', 1);
+  }
+
+  /**
+   * Adds a fade-out transition to an element and
+   * removes the element after the transition completes.
+   *
+   * @param el d3 selection to add the transition to
+   * @param t the transition to add
+   * @returns applied d3 transition
+   */
+  private fadeOutAndRemove(
+    el: d3.Selection<HTMLElement, any, any, any>,
+    t: d3.Transition<HTMLElement, any, any, any>
+  ): d3.Transition<HTMLElement, any, any, any> {
+    return el.transition(t)
+      .attr('opacity', 0)
+      .on('end', () => el.remove());
   }
 
   //
