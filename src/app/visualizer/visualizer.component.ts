@@ -184,28 +184,43 @@ export class VisualizerComponent implements OnChanges {
     const preDates = 7 - firstWeekLength;
     const postDates = 6 - lastOfMonth.getDay();
     const bounds = svg.select('.bounds');
+    const transition = this.getTransition();
 
     bounds.selectAll('rect.pre-dates')
       .data([preDates])
-      .join('rect')
-      .classed('pre-dates', true)
-        .attr('x', 0)
-        .attr('y', 0)
-        .attr('rx', 25)
-        .attr('ry', 25)
-        .attr('width', d => this.colWidth * d)
-        .attr('height', this.rowWidth);
+      .join(
+        enter => enter.append('rect')
+          .classed('pre-dates', true)
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('rx', 25)
+            .attr('ry', 25)
+            .attr('width', d => this.colWidth * d)
+            .attr('height', this.rowWidth),
+        update => update.transition(transition)
+          .attr('width', d => this.colWidth * d)
+          .attr('height', this.rowWidth),
+        exit => exit.remove()
+      );
 
     bounds.selectAll('rect.post-dates')
       .data([postDates])
-      .join('rect')
-      .classed('post-dates', true)
-        .attr('x', this.colWidth * (lastOfMonth.getDay() + 1))
-        .attr('y', this.height - this.rowWidth)
-        .attr('rx', 25)
-        .attr('ry', 25)
-        .attr('width', d => this.colWidth * d)
-        .attr('height', this.rowWidth);
+      .join(
+        enter => enter.append('rect')
+          .classed('post-dates', true)
+            .attr('rx', 25)
+            .attr('ry', 25)
+            .attr('x', this.colWidth * (lastOfMonth.getDay() + 1))
+            .attr('y', this.height - this.rowWidth)
+            .attr('width', d => this.colWidth * d)
+            .attr('height', this.rowWidth),
+        update => update.transition(transition)
+          .attr('x', this.colWidth * (lastOfMonth.getDay() + 1))
+          .attr('y', this.height - this.rowWidth)
+          .attr('width', d => this.colWidth * d)
+          .attr('height', this.rowWidth),
+        exit => exit.remove()
+      );
   }
 
   /**
