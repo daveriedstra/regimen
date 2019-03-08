@@ -7,8 +7,8 @@
     <input 
       class="input input--date"
       type="date"
-      [value]="entry.date | date: 'yyyy-MM-dd'"
-      (input)="entry.date = $event.target.valueAsDate"
+      [value]="today | date: 'yyyy-MM-dd'"
+      (input)="onEntryDateChange($event.target)"
       id="date"
       name="date"
     />
