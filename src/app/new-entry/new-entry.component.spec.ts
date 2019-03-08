@@ -81,14 +81,13 @@ describe('NewEntryComponent', () => {
     component.hours = 1;
     component.mins = 25;
     const expectedVal = (component.hours * 60 + component.mins) * 60 * 1000;
-    const expectedEntry = Object.assign({}, component.entry);
-    expectedEntry.duration = expectedVal;
 
-    spyOn(fakeColl, 'add')
-      .and.callThrough();
+    spyOn(fakeColl, 'add').and.callThrough();
     component.addEntry(form);
-    expect(fakeColl.add)
-      .toHaveBeenCalledWith(expectedEntry);
+
+    const actualEntry = fakeColl.add.calls.mostRecent().args[0];
+    expect(actualEntry.duration).toEqual(expectedVal);
+
     done();
   });
 
