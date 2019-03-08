@@ -13,7 +13,7 @@ import { Entry } from '../models/entry.model';
 })
 export class NewEntryComponent implements OnInit {
   private userEntryCollection: AngularFirestoreCollection<Entry>;
-  today = new Date();
+  dateVal = (new Date()).toISOString().substr(0, 10);
   entry: Entry = {
     date: new Date(),
     duration: 0,
@@ -30,7 +30,6 @@ export class NewEntryComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.entry.date.setUTCHours(0);
     this.afAuth.user.pipe(
       take(1)
     ).subscribe(u => {
@@ -45,16 +44,6 @@ export class NewEntryComponent implements OnInit {
     this.router.navigate(['..']);
   }
 
-  onEntryDateChange(dateInput: HTMLInputElement) {
-    if (dateInput.value) {
-      const d = new Date(dateInput.valueAsDate);
-      d.setUTCHours(0);
-      this.entry.date = d;
-    } else {
-      this.entry.date = undefined;
-    }
-  }
-
   addEntry(form: NgForm) {
     if (form.invalid) {
       return;
@@ -62,7 +51,10 @@ export class NewEntryComponent implements OnInit {
 
     const minutes = (this.hours * 60) + this.mins;
     this.entry.duration = minutes * 60 * 1000;
-    this.entry.date.setUTCHours(0, 0, 0);
+
+    this.entry.date = new Date(this.dateVal);
+    this.entry.date.setMinutes(this.entry.date.getTimezoneOffset());
+
     this.userEntryCollection.add(this.entry)
       .then(ref => this.router.navigate(['/']));
   }
