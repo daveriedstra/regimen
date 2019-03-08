@@ -42,7 +42,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   onDateSelected(d: DateEntries) {
-    this.stagedEntry = this.dateEntriesToEntry(d);
+    if (!!d) {
+      this.stagedEntry = this.dateEntriesToEntry(d);
+    } else {
+      this.stagedEntry = undefined;
+    }
   }
 
   onMonthChange(newMonth: number) {

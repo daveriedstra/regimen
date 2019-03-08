@@ -88,6 +88,12 @@ describe('HomeComponent', () => {
     expect(component.overviewData.length).not.toBe(0);
   });
 
+  it('should fail gracefully when no entries exist', () => {
+    fakeColl.collToReturn = [];
+    fakeAfAuth.user.next({});
+    expect(component.overviewData.length).toBe(0);
+  })
+
   it('should get most recent entries from last month', () => {
     const last = new Date();
     last.setUTCDate(0);
