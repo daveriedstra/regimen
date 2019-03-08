@@ -2,11 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
-
-import { take } from 'rxjs/operators';
-
-import { Entry } from '../models/entry.model';
 import { NgForm } from '@angular/forms';
+import { take } from 'rxjs/operators';
+import { Entry } from '../models/entry.model';
 
 @Component({
   selector: 'app-new-entry',
@@ -15,6 +13,7 @@ import { NgForm } from '@angular/forms';
 })
 export class NewEntryComponent implements OnInit {
   private userEntryCollection: AngularFirestoreCollection<Entry>;
+  today = new Date();
   entry: Entry = {
     date: new Date(),
     duration: 0,
@@ -31,6 +30,7 @@ export class NewEntryComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.entry.date.setUTCHours(0);
     this.afAuth.user.pipe(
       take(1)
     ).subscribe(u => {
@@ -42,7 +42,17 @@ export class NewEntryComponent implements OnInit {
 
   back(e: Event) {
     e.preventDefault();
-    this.router.navigate(['..'])
+    this.router.navigate(['..']);
+  }
+
+  onEntryDateChange(dateInput: HTMLInputElement) {
+    if (dateInput.value) {
+      const d = new Date(dateInput.valueAsDate);
+      d.setUTCHours(0);
+      this.entry.date = d;
+    } else {
+      this.entry.date = undefined;
+    }
   }
 
   addEntry(form: NgForm) {
