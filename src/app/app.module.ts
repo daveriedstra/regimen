@@ -23,6 +23,7 @@ import { FooterComponent } from './footer/footer.component';
 import { The404Component } from './the404/the404.component';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { VisualizerComponent } from './visualizer/visualizer.component';
+import { SelectAllDirective } from './select-all.directive';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { VisualizerComponent } from './visualizer/visualizer.component';
     FooterComponent,
     The404Component,
     PrivacyComponent,
-    VisualizerComponent
+    VisualizerComponent,
+    SelectAllDirective
   ],
   imports: [
     BrowserModule,
