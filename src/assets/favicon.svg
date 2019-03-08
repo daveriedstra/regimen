@@ -59,7 +59,7 @@
        transform="scale(1,-1)" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:31.2163868px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#353230;fill-opacity:1;stroke:none;stroke-width:0.78040963;"
+       style="font-style:normal;font-weight:normal;font-size:31.2163868px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#353230;fill-opacity:1;stroke:none;stroke-width:0.78040963"
        x="18.186968"
        y="281.72653"
        id="text4522"><tspan
@@ -67,6 +67,6 @@
          id="tspan4520"
          x="18.186968"
          y="281.72653"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:83.24370575px;font-family:Overpass;-inkscape-font-specification:Overpass;stroke-width:0.78040963;fill:#353230;fill-opacity:1;">r</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:83.24370575px;font-family:Overpass;-inkscape-font-specification:Overpass;fill:#353230;fill-opacity:1;stroke-width:0.78040963">r</tspan></text>
   </g>
 </svg>

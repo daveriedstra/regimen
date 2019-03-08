@@ -1,9 +1,9 @@
 <div class="note">
-  <ng-container *ngIf="lastEntry; else noentry">
-    <p class="input-label note__date"><time>{{lastEntry.date | date : 'fullDate'}}</time>:</p>
+  <ng-container *ngIf="stagedEntry; else noentry">
+    <p class="input-label note__date"><time>{{stagedEntry.date | date : 'fullDate'}}</time>:</p>
     <div 
       class="note__content"
-      [innerHtml]="lastEntry.note | newline"
+      [innerHtml]="stagedEntry.note | newline"
     ></div>
   </ng-container>
 
@@ -23,10 +23,11 @@
 </div>
 
 <div class="overview">
-  <calendar-heatmap
-    *ngIf="overviewData?.length > 0"
+  <app-visualizer
+    *ngIf="overviewData"
     [data]="overviewData"
-    overview="month"
-    color="#3F4E51"
-  ></calendar-heatmap>
+    (dateSelected)="onDateSelected($event)"
+    (prevMonth)="onMonthChange($event)"
+    (nextMonth)="onMonthChange($event)"
+  ></app-visualizer>
 </div>

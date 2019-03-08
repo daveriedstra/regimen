@@ -1,0 +1,70 @@
+.controls {
+  display: block;
+  position: relative;
+  text-align: center;
+}
+
+.control-button {
+  position: absolute;
+  font-size: 0.8rem;
+}
+
+.control-button--previous {
+  left: 0;
+}
+
+.control-button--next {
+  right: 0;
+}
+
+.controls .label {
+  font-weight: bold;
+}
+
+.weekday {
+  display: inline-block;
+  text-align: center;
+  width: (100% / 7);
+  padding: 0.5rem 0;
+}
+
+.svg-container {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-top: (1 / 3) * 100%;
+}
+
+.visualizer-content {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+}
+
+::ng-deep .dates g {
+  cursor: pointer;
+}
+
+::ng-deep .click-target {
+  fill-opacity: 0;
+}
+
+::ng-deep .today {
+  stroke: black;
+  stroke-width: 0.8rem;
+  stroke-opacity: 0.7;
+  fill-opacity: 0;
+}
+
+::ng-deep .today--dark {
+  stroke: white;
+}
+
+::ng-deep .pre-dates,
+::ng-deep .post-dates {
+  fill-opacity: 0.1;
+}

@@ -1,0 +1,34 @@
+<div class="controls">
+  <a
+    href="#"
+    (click)="onPrevMonth(); $event.preventDefault()"
+    class="control-button control-button--previous"
+  >« previous month</a>
+  <label
+    class="label"
+  >{{stagedMonth | date : 'MMMM yyyy'}}</label>
+  <a
+    href="#"
+    (click)="onNextMonth(); $event.preventDefault()"
+    class="control-button control-button--next"
+  >next month »</a>
+</div>
+<div class="weekdays">
+  <span 
+    class="weekday input-label"
+    *ngFor="let abbrev of weekdays"
+    [innerText]="abbrev"
+  ></span>
+</div>
+<div class="svg-container">
+  <svg 
+    class="visualizer-content"
+    viewBox="0 0 3000 1000"
+    preserveAspectRatio="xMinYMin meet"
+    width="3000"
+    height="1000"
+  >
+    <g class="dates"></g>
+    <g class="bounds"></g>
+  </svg>
+</div>

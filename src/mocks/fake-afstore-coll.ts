@@ -1,3 +1,5 @@
+import { of } from 'rxjs';
+
 export class FakeAfstoreColl<T = any> {
   docToReturn;
   collToReturn;
@@ -12,5 +14,9 @@ export class FakeAfstoreColl<T = any> {
 
   add(data: T) {
     return Promise.resolve({});
+  }
+
+  valueChanges() {
+    return of(this.collToReturn);
   }
 }
