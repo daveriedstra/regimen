@@ -62,6 +62,7 @@ export class NewEntryComponent implements OnInit {
 
     const minutes = (this.hours * 60) + this.mins;
     this.entry.duration = minutes * 60 * 1000;
+    this.entry.date.setUTCHours(0, 0, 0);
     this.userEntryCollection.add(this.entry)
       .then(ref => this.router.navigate(['/']));
   }
