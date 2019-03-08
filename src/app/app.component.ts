@@ -9,13 +9,12 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void>;
+  private unsubscribe: Subject<void> = new Subject();
   loggedIn = false;
 
   constructor(private auth: AngularFireAuth) { }
 
   ngOnInit() {
-    this.unsubscribe = new Subject();
     this.auth.authState.pipe(
       takeUntil(this.unsubscribe)
     ).subscribe(u => {

@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Entry } from '../models/entry.model';
-import { AngularFirestore, CollectionReference, Query } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { take, takeUntil, map, filter } from 'rxjs/operators';
-import { Observable, Subject } from 'rxjs';
+import { take, map, filter, switchMap } from 'rxjs/operators';
+import { Observable, Subject, of } from 'rxjs';
+import DateEntries from '../models/date-entries.interface';
 
 @Component({
   selector: 'app-home',
@@ -11,9 +12,10 @@ import { Observable, Subject } from 'rxjs';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  lastEntry: Entry;
-  overviewData: HmDatum[] = [];
+  stagedEntry: Entry;
+  overviewData: DateEntries[] = [];
   unsubscribe: Subject<void>;
+  private uid: string;
 
   constructor(
     private afstore: AngularFirestore,
@@ -25,18 +27,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.afAuth.user.pipe(
       take(1)
     ).subscribe(u => {
-      const uid = u.uid;
-
-      this.getMostRecentEntry(uid)
-        .subscribe(e => {
-          e.date = e.date.toDate();
-          this.lastEntry = e;
-        });
-
-      this.getThisMonthsEntries(uid)
+      this.uid = u.uid;
+      this.getEntriesForMostRecentPopulatedMonth(u.uid, this.getFirstOfMonth())
         .subscribe((entries: Entry[]) => {
           this.overviewData = this.formatOverviewData(entries);
-          this.fixSvg();
+          this.onDateSelected(this.getMostRecentEntries(this.overviewData));
         });
     });
   }
@@ -46,99 +41,126 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  private getMostRecentEntry(uid: string): Observable<Entry> {
-    return this.afstore.doc(`entries/${uid}`)
-      .collection('entries', r => this.todayFilter(r))
-      .valueChanges()
-      .pipe(
-        takeUntil(this.unsubscribe),
-        filter(e => !!e && e.length > 0),
-        map(e => e[0] as Entry)
-      );
+  onDateSelected(d: DateEntries) {
+    if (!!d) {
+      this.stagedEntry = this.dateEntriesToEntry(d);
+    } else {
+      this.stagedEntry = undefined;
+    }
   }
 
-  private getThisMonthsEntries(uid: string): Observable<Entry[]> {
+  onMonthChange(newMonth: number) {
+    this.getEntriesForMonth(this.uid, this.getFirstOfMonth(newMonth))
+      .subscribe(entries => this.overviewData = this.formatOverviewData(entries));
+  }
+
+  private getMostRecentEntries(entries: DateEntries[]): DateEntries {
+    const today = new Date();
+    return entries.filter(d => d.date <= today && !d.isTodayMarker)
+      .sort((a, b) => a.date > b.date ? -1 : 1)[0];
+  }
+
+  private getEntriesForMonth(uid: string, firstOfMonth: Date): Observable<Entry[]> {
+    const lastOfMonth = new Date(firstOfMonth);
+    lastOfMonth.setMonth(lastOfMonth.getMonth() + 1, 0);
+    lastOfMonth.setHours(23, 59, 59);
     return this.afstore.doc(`entries/${uid}`)
-      .collection('entries', r => this.monthFilter(r))
+      .collection('entries', r => {
+        return r.orderBy('date', 'desc')
+          .where('date', '>=', firstOfMonth)
+          .where('date', '<=', lastOfMonth);
+      })
       .valueChanges()
       .pipe(
-        takeUntil(this.unsubscribe),
-        filter(e => !!e)
+        take(1),
+        filter(e => !!e),
+        map(e => e.map(x => {
+          x.date = x.date.toDate();
+          return x;
+        }))
       ) as Observable<Entry[]>;
   }
 
-  private formatOverviewData(entries: Entry[]): HmDatum[] {
-    const newOverview: HmDatum[] = [];
+  /**
+   * Wraps getEntriesForMonth, calling it for each preceding month
+   * until it finds one with entries (or maxes out its attempts).
+   *
+   * Recursive.
+   */
+  private getEntriesForMostRecentPopulatedMonth(uid: string, firstOfMonth: Date, attempt = 0): Observable<Entry[]> {
+    const max = 6;
+    return this.getEntriesForMonth(uid, firstOfMonth)
+      .pipe(
+        switchMap(e => {
+          if ((!e || !e.length) && attempt < max) {
+            firstOfMonth.setDate(0);
+            firstOfMonth.setDate(1);
+            attempt++;
+
+            // point of recursion
+            return this.getEntriesForMostRecentPopulatedMonth(uid, firstOfMonth, attempt);
+          }
+          return of(e);
+        })
+      );
+  }
+
+
+  private formatOverviewData(entries: Entry[]): DateEntries[] {
+    const newOverview: DateEntries[] = [];
     entries.forEach(e => {
-      e.date = e.date.toDate();
       const dateEntry = newOverview.find(x => x.date.getDate() === e.date.getDate());
       e.duration /= 1000;
       if (dateEntry) {
         // consolidate new entry with existing
-        dateEntry.total += e.duration;
-        dateEntry.details.push(this.entryToDetails(e));
+        dateEntry.totalDuration += e.duration;
+        dateEntry.entries.push(e);
       } else {
-        newOverview.push(this.entryToDatum(e));
+        newOverview.push(this.entryToDateEntries(e));
       }
     });
     return newOverview;
   }
 
-  /**
-   * not great to mess with the DOM directly,
-   * but this heatmap widget is not great either...
-   */
-  private fixSvg() {
-    setTimeout(() => {
-      const cal = document.getElementsByTagName('calendar-heatmap')[0];
-      if (!cal) {
-        return;
-      }
-      const svg = cal.getElementsByTagName('svg')[0];
-
-      const w = svg.getAttribute('width'),
-        h = svg.getAttribute('height');
-      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
-    }, 0);
-  }
-
-  private todayFilter(ref: CollectionReference): Query {
-    return ref.orderBy('date', 'desc')
-      .limit(1);
-  }
-
-  private monthFilter(ref: CollectionReference): Query {
-    const today = new Date();
-    today.setMonth(today.getMonth() - 1);
-    return ref.orderBy('date', 'desc')
-      .where('date', '>=', today);
-  }
-
-  private entryToDatum(e: Entry): HmDatum {
+  private entryToDateEntries(e: Entry): DateEntries {
     return {
       date: e.date,
-      total: e.duration,
-      details: [this.entryToDetails(e)]
+      totalDuration: e.duration,
+      entries: [e]
     };
   }
 
-  private entryToDetails(e: Entry): HmDetails {
-    return {
-      name: e.description,
-      date: e.date,
-      value: e.duration
+  private dateEntriesToEntry(d: DateEntries): Entry {
+    const initial: Entry = {
+      duration: d.totalDuration,
+      description: '',
+      note: '',
+      date: d.date
     };
+
+    // This reducer just makes a nice concatenation
+    // of the entry string properties; the other data is
+    // gleaned from the parent DateEntries.
+    return d.entries.reduce((a, b) => {
+      a.note = this.niceConcat(a.note, b.note);
+      a.description = this.niceConcat(a.description, b.description);
+
+      return a;
+    }, initial);
   }
-}
 
-interface HmDatum {
-  date: Date;
-  total: number;
-  details: HmDetails[];
-}
+  private niceConcat(a: string, b: string): string {
+    a = a.trim();
+    b = b.trim();
 
-interface HmDetails {
-  name: string;
-  date: Date;
-  value: number;
+    if (a.length) {
+      return `${a}\n--\n${b}`;
+    }
+
+    return b;
+  }
+
+  private getFirstOfMonth(month: number = (new Date()).getMonth(), year = (new Date()).getFullYear()): Date {
+    return new Date(year, month, 1, 0, 0, 0, 0);
+  }
 }

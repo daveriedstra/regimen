@@ -1,7 +1,5 @@
-import { Timestamp } from 'firebase/firestore';
-
 export interface Entry {
-  date: Date | Timestamp;
+  date: Date;
   duration: number;
   description: string;
   note: string;

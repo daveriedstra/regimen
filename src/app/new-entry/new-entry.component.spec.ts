@@ -4,11 +4,11 @@ import { NewEntryComponent } from './new-entry.component';
 import { Router } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { FakeAfstore } from '../../mocks/fake-afstore';
 import { FakeAfAuth } from '../../mocks/fakeafauth';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { FakeAfstoreColl } from 'src/mocks/fake-afstore-coll';
-import { FakeAfstoreDoc } from 'src/mocks/fake-afstore-doc';
+import { FakeAfstoreDoc } from '../../mocks/fake-afstore-doc';
+import { FakeAfstoreColl } from '../../mocks/fake-afstore-coll';
 
 describe('NewEntryComponent', () => {
   let component: NewEntryComponent;
@@ -34,7 +34,7 @@ describe('NewEntryComponent', () => {
         FormsModule
       ],
       providers: [
-        { provide: Router, useValue: {} },
+        { provide: Router, useValue: { navigate: () => {} } },
         { provide: AngularFireAuth, useValue: fakeAfAuth },
         { provide: AngularFirestore, useValue: fStore }
       ]
