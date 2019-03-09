@@ -2,9 +2,12 @@
 
 :host {
   display: block;
-  background: $color-dark;
-  color: $color-bg;
-  box-shadow: rgba(53, 50, 48, 0.3) 0 0 6px 0;
+  // background: $color-dark;
+  // color: $color-bg;
+  background: $color-bg;
+  color: $color-text-light;
+  box-shadow: rgba(53, 50, 48, 0.3) 0 0 3px 0;
+  border-bottom: thin solid $border-color;
 }
 
 .app-wrap {
@@ -13,6 +16,35 @@
   justify-content: space-between;
 }
 
+.svg-container ::ng-deep svg {
+  height: 1.5rem;
+  width: 1.5rem;
+  vertical-align: bottom;
+  fill: $color-text;
+}
+
+h2 {
+  margin: 0;
+}
+
 h2 a {
   text-decoration: none;
+  color: $color-text;
+  &:visited {
+    color: $color-text;
+  }
+}
+
+.svg-link {
+  margin-left: 1em;
+  transition: opacity 250ms ease;
+  &:hover {
+    opacity: 0.5;
+  }
+}
+
+::ng-deep .svg-link svg {
+  height: 1.5em;
+  fill: $color-text-light;
+  vertical-align: bottom;
 }
