@@ -27,6 +27,7 @@ import { The404Component } from './the404/the404.component';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { VisualizerComponent } from './visualizer/visualizer.component';
 import { SelectAllDirective } from './select-all.directive';
+import { DateEntriesComponent } from './date-entries/date-entries.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { SelectAllDirective } from './select-all.directive';
     The404Component,
     PrivacyComponent,
     VisualizerComponent,
-    SelectAllDirective
+    SelectAllDirective,
+    DateEntriesComponent
   ],
   imports: [
     BrowserModule,

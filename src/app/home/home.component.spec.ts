@@ -124,7 +124,7 @@ describe('HomeComponent', () => {
       return prev.date > next.date && !prev.isTodayMarker ? prev : next;
     });
 
-    expect(component.stagedEntry.date).toBe(mostRecentEntry.date);
+    expect(component.stagedDateEntries.date).toBe(mostRecentEntry.date);
   });
 
 
@@ -144,7 +144,7 @@ describe('HomeComponent', () => {
       return prev.date > next.date && !prev.isTodayMarker ? prev : next;
     });
 
-    expect(component.stagedEntry.date).toBe(mostRecentEntry.date);
+    expect(component.stagedDateEntries.date).toBe(mostRecentEntry.date);
   });
 
 });

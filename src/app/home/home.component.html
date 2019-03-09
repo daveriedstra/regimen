@@ -1,10 +1,8 @@
 <div class="note">
   <ng-container *ngIf="stagedEntry; else noentry">
-    <p class="input-label note__date"><time>{{stagedEntry.date | date : 'fullDate'}}</time>:</p>
-    <div 
-      class="note__content"
-      [innerHtml]="stagedEntry.note | newline"
-    ></div>
+    <app-date-entries
+      [dateEntries]="stagedDateEntries"
+    ></app-date-entries>
   </ng-container>
 
   <ng-template #noentry>
