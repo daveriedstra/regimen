@@ -10,6 +10,8 @@ import { VisualizerComponent } from '../visualizer/visualizer.component';
 import { Entry } from '../models/entry.model';
 import { FakeAfstoreDoc } from '../../mocks/fake-afstore-doc';
 import { FakeAfstoreColl } from '../../mocks/fake-afstore-coll';
+import { DateEntriesComponent } from '../date-entries/date-entries.component';
+import { PrettyDurationPipe } from '../pretty-duration.pipe';
 
 const makeEntriesBetween = (afterDate: Date, beforeDate: Date) => {
   const out: Entry[] = [];
@@ -53,7 +55,9 @@ describe('HomeComponent', () => {
       declarations: [
         HomeComponent,
         NewlinePipe,
-        VisualizerComponent
+        VisualizerComponent,
+        DateEntriesComponent,
+        PrettyDurationPipe
       ],
       providers: [
         { provide: AngularFireAuth, useValue: fakeAfAuth },
@@ -92,7 +96,7 @@ describe('HomeComponent', () => {
     fakeColl.collToReturn = [];
     fakeAfAuth.user.next({});
     expect(component.overviewData.length).toBe(0);
-  })
+  });
 
   it('should get most recent entries from last month', () => {
     const last = new Date();
@@ -124,7 +128,7 @@ describe('HomeComponent', () => {
       return prev.date > next.date && !prev.isTodayMarker ? prev : next;
     });
 
-    expect(component.stagedEntry.date).toBe(mostRecentEntry.date);
+    expect(component.stagedDateEntries.date).toBe(mostRecentEntry.date);
   });
 
 
@@ -144,7 +148,7 @@ describe('HomeComponent', () => {
       return prev.date > next.date && !prev.isTodayMarker ? prev : next;
     });
 
-    expect(component.stagedEntry.date).toBe(mostRecentEntry.date);
+    expect(component.stagedDateEntries.date).toBe(mostRecentEntry.date);
   });
 
 });

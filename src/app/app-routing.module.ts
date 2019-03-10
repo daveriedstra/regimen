@@ -7,7 +7,7 @@ import { PreferencesComponent } from './preferences/preferences.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth.guard';
 import { NoAuthGuard } from './noauth.guard';
-import { PrivacyComponent } from './privacy/privacy.component';
+import { AboutComponent } from './privacy/privacy.component';
 import { The404Component } from './the404/the404.component';
 
 const routes: Routes = [{
@@ -53,11 +53,15 @@ const routes: Routes = [{
     NoAuthGuard
   ]
 }, {
-  path: 'privacy',
-  component: PrivacyComponent
+  path: 'about',
+  component: AboutComponent
 }, {
   path: '404',
   component: The404Component
+}, {
+  path: 'privacy',
+  redirectTo: 'about',
+  pathMatch: 'full'
 }, {
   path: '',
   pathMatch: 'full',

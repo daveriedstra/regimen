@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
 import { Entry } from '../models/entry.model';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -12,10 +12,15 @@ import DateEntries from '../models/date-entries.interface';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  stagedEntry: Entry;
+  @HostBinding('class.loaded')
+  loaded = false;
+  @HostBinding('class.loading')
+  loading = false;
+  stagedDateEntries: DateEntries;
   overviewData: DateEntries[] = [];
   unsubscribe: Subject<void>;
   private uid: string;
+  private loadingDelay = 2 * 1000;
 
   constructor(
     private afstore: AngularFirestore,
@@ -24,12 +29,16 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.unsubscribe = new Subject();
+    const loadingTimeout = setTimeout(() => this.loading = true, this.loadingDelay);
     this.afAuth.user.pipe(
       take(1)
     ).subscribe(u => {
       this.uid = u.uid;
       this.getEntriesForMostRecentPopulatedMonth(u.uid, this.getFirstOfMonth())
         .subscribe((entries: Entry[]) => {
+          this.loaded = true;
+          this.loading = false;
+          clearTimeout(loadingTimeout);
           this.overviewData = this.formatOverviewData(entries);
           this.onDateSelected(this.getMostRecentEntries(this.overviewData));
         });
@@ -42,11 +51,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   onDateSelected(d: DateEntries) {
-    if (!!d) {
-      this.stagedEntry = this.dateEntriesToEntry(d);
-    } else {
-      this.stagedEntry = undefined;
-    }
+    this.stagedDateEntries = d;
   }
 
   onMonthChange(newMonth: number) {
@@ -128,36 +133,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       totalDuration: e.duration,
       entries: [e]
     };
-  }
-
-  private dateEntriesToEntry(d: DateEntries): Entry {
-    const initial: Entry = {
-      duration: d.totalDuration,
-      description: '',
-      note: '',
-      date: d.date
-    };
-
-    // This reducer just makes a nice concatenation
-    // of the entry string properties; the other data is
-    // gleaned from the parent DateEntries.
-    return d.entries.reduce((a, b) => {
-      a.note = this.niceConcat(a.note, b.note);
-      a.description = this.niceConcat(a.description, b.description);
-
-      return a;
-    }, initial);
-  }
-
-  private niceConcat(a: string, b: string): string {
-    a = a.trim();
-    b = b.trim();
-
-    if (a.length) {
-      return `${a}\n--\n${b}`;
-    }
-
-    return b;
   }
 
   private getFirstOfMonth(month: number = (new Date()).getMonth(), year = (new Date()).getFullYear()): Date {

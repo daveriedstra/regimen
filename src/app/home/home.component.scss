@@ -1,5 +1,39 @@
 @import "../vars.scss";
 
+:host {
+  display: block;
+  position: relative;
+}
+
+:host > * {
+  display: block;
+  opacity: 0;
+  transition: opacity 250ms ease;
+}
+
+:host(:before) {
+  content: "loading...";
+  display: block;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-style: italic;
+  transition: opacity 250ms ease;
+  opacity: 0;
+}
+
+:host(.loading):before {
+  opacity: 1;
+}
+
+:host(.loaded) > * {
+  opacity: 1;
+}
+
+.note__intro {
+  margin-top: 0;
+}
+
 .note__content {
   border: thin solid $border-color;
   padding: 2rem;
@@ -9,12 +43,7 @@
 }
 
 .overview {
-  // height: 10rem;
-}
-
-.add {
-  padding: 3rem 0 6rem;
-  text-align: center
+  margin-top: 6rem;
 }
 
 .bottom-link {

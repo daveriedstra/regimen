@@ -2,7 +2,7 @@
   #form="ngForm"
   (ngSubmit)="$event.preventDefault(); addEntry(form);"
 >
-  <div class="date">
+  <div class="date input-container">
     <label for="date" class="input-label">Date</label>
     <input 
       class="input input--date"
@@ -26,6 +26,7 @@
       [(ngModel)]="hours"
       min="0"
       max="24"
+      appSelectAll
     />
     <label 
       for="duration-hr" 
@@ -39,6 +40,7 @@
       [(ngModel)]="mins"
       min="0"
       max="59"
+      appSelectAll
     />
     <label 
       for="duration-mins" 

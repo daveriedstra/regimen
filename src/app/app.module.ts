@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
+import { InlineSVGModule } from 'ng-inline-svg';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,8 +24,11 @@ import { NewlinePipe } from './newline.pipe';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { The404Component } from './the404/the404.component';
-import { PrivacyComponent } from './privacy/privacy.component';
+import { AboutComponent } from './privacy/privacy.component';
 import { VisualizerComponent } from './visualizer/visualizer.component';
+import { SelectAllDirective } from './select-all.directive';
+import { DateEntriesComponent } from './date-entries/date-entries.component';
+import { PrettyDurationPipe } from './pretty-duration.pipe';
 
 @NgModule({
   declarations: [
@@ -39,8 +45,11 @@ import { VisualizerComponent } from './visualizer/visualizer.component';
     HeaderComponent,
     FooterComponent,
     The404Component,
-    PrivacyComponent,
-    VisualizerComponent
+    AboutComponent,
+    VisualizerComponent,
+    SelectAllDirective,
+    DateEntriesComponent,
+    PrettyDurationPipe
   ],
   imports: [
     BrowserModule,
@@ -48,7 +57,9 @@ import { VisualizerComponent } from './visualizer/visualizer.component';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
+    InlineSVGModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

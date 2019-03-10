@@ -1,0 +1,36 @@
+@import "../vars.scss";
+
+:host {
+  display: block;
+  border-radius: $border-radius;
+  border: thin solid $border-color;
+}
+
+header {
+  padding: 1rem;
+  background: #eee;
+  border-bottom: thin solid $border-color;
+  border-radius: $border-radius $border-radius 0 0;
+
+  p {
+    margin: 0;
+  }
+}
+
+.label {
+  color: $color-text-light;
+  font-size: 0.8rem;
+}
+
+.entry:not(:last-of-type) {
+  border-bottom: thin solid $border-color;
+}
+
+.entry {
+  p {
+    margin: 0;
+  }
+  section {
+    margin: 1em;
+  }
+}

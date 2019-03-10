@@ -1,0 +1,16 @@
+<header>
+  <p class="label">{{dateEntries?.totalDuration | prettyDuration}} logged on {{dateEntries?.date | date}}</p>
+</header>
+<article
+  *ngFor="let entry of dateEntries?.entries"
+  class="entry"
+>
+  <section>
+    <p class="label">{{entry.duration | prettyDuration}}</p>
+    <p [innerHtml]="entry.description | newline" *ngIf="entry.description"></p>
+  </section>
+  <section *ngIf="entry.note">
+    <p class="label">Notes</p>
+    <p [innerHtml]="entry.note | newline"></p>
+  </section>
+</article>

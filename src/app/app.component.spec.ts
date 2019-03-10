@@ -3,9 +3,9 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FakeAfAuth } from '../mocks/fakeafauth';
+import { FakeInlineSVGDirective } from '../mocks/fake-inline-svg';
 
 describe('AppComponent', () => {
   let fakeAfAuth: FakeAfAuth;
@@ -20,7 +20,8 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent,
         HeaderComponent,
-        FooterComponent
+        FooterComponent,
+        FakeInlineSVGDirective
       ],
       providers: [
         { provide: AngularFireAuth, useValue: fakeAfAuth }

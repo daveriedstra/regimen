@@ -1,8 +1,27 @@
 <div class="app-wrap">
-  <h2><a routerLink="/">{{headerText}}</a></h2>
-  <a
-    href="#"
-    routerLink="/preferences"
-    class="preferences-link"
-  >preferences</a>
+  <h2>
+    <a routerLink="/">
+      <span
+        class="svg-container"
+        [inlineSVG]="'/assets/icon-hollow.svg'"
+      ></span>
+      Regimen
+    </a>
+  </h2>
+  <div>
+    <a
+      href="#"
+      routerLink="/new-entry"
+      class="new-link svg-link"
+      title="New Entry"
+      [inlineSVG]="'/assets/add.svg'"
+    ></a>
+    <a
+      href="#"
+      routerLink="/preferences"
+      class="preferences-link svg-link"
+      title="Preferences"
+      [inlineSVG]="'/assets/gear.svg'"
+    ></a>
+  </div>
 </div>
