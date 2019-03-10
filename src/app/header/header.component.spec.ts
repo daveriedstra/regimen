@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HeaderComponent } from './header.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
+import { FakeInlineSVGDirective } from '../../mocks/fake-inline-svg';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -19,7 +20,10 @@ describe('HeaderComponent', () => {
       snapshot : { }
     };
     TestBed.configureTestingModule({
-      declarations: [ HeaderComponent ],
+      declarations: [
+        HeaderComponent,
+        FakeInlineSVGDirective
+      ],
       providers: [
         { provide: Router, useValue: fakeRouter },
         { provide: ActivatedRoute, useValue: fakeRoute }

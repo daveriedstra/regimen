@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DateEntriesComponent } from './date-entries.component';
+import { NewlinePipe } from '../newline.pipe';
 
 describe('DateEntriesComponent', () => {
   let component: DateEntriesComponent;
@@ -8,7 +9,10 @@ describe('DateEntriesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DateEntriesComponent ]
+      declarations: [
+        DateEntriesComponent,
+        NewlinePipe
+      ]
     })
     .compileComponents();
   }));

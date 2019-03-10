@@ -10,6 +10,7 @@ import { VisualizerComponent } from '../visualizer/visualizer.component';
 import { Entry } from '../models/entry.model';
 import { FakeAfstoreDoc } from '../../mocks/fake-afstore-doc';
 import { FakeAfstoreColl } from '../../mocks/fake-afstore-coll';
+import { DateEntriesComponent } from '../date-entries/date-entries.component';
 
 const makeEntriesBetween = (afterDate: Date, beforeDate: Date) => {
   const out: Entry[] = [];
@@ -53,7 +54,8 @@ describe('HomeComponent', () => {
       declarations: [
         HomeComponent,
         NewlinePipe,
-        VisualizerComponent
+        VisualizerComponent,
+        DateEntriesComponent
       ],
       providers: [
         { provide: AngularFireAuth, useValue: fakeAfAuth },
@@ -92,7 +94,7 @@ describe('HomeComponent', () => {
     fakeColl.collToReturn = [];
     fakeAfAuth.user.next({});
     expect(component.overviewData.length).toBe(0);
-  })
+  });
 
   it('should get most recent entries from last month', () => {
     const last = new Date();
