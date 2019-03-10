@@ -2,7 +2,7 @@
   #form="ngForm"
   (ngSubmit)="$event.preventDefault(); onSubmit(form)"
 >
-  <fieldset class="email">
+  <div class="email fieldset">
     <legend>
       <h3>Email</h3>
     </legend>
@@ -55,9 +55,9 @@
       />
     </div>
     <p>{{emailMsg}}</p>
-  </fieldset>
+  </div>
 
-  <fieldset class="password">
+  <div class="password fieldset">
     <legend>
       <h3>Password</h3>
     </legend>
@@ -106,9 +106,9 @@
       />
     </div>
     <p>{{passwordMsg}}</p>
-  </fieldset>
+  </div>
 
-  <fieldset class="data">
+  <div class="data fieldset">
     <legend>
       <h3>Data</h3>
     </legend>
@@ -124,7 +124,7 @@
       />
     </div>
     <p>{{deleteMsg}}</p>
-  </fieldset>
+  </div>
 </form>
 
 <div class="bottom-link">

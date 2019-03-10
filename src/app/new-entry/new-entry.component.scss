@@ -1,3 +1,7 @@
+form > *:first-child {
+  margin-top: 0;
+}
+
 #duration-hr, #duration-min {
   min-width: 0;
   width: 5rem;

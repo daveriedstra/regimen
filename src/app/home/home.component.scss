@@ -1,5 +1,10 @@
 @import "../vars.scss";
 
+:host {
+  display: block;
+  position: relative;
+}
+
 :host > * {
   display: block;
   opacity: 0;
@@ -23,6 +28,10 @@
 
 :host(.loaded) > * {
   opacity: 1;
+}
+
+.note__intro {
+  margin-top: 0;
 }
 
 .note__content {
