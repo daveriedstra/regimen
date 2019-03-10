@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
 import { Entry } from '../models/entry.model';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -12,6 +12,8 @@ import DateEntries from '../models/date-entries.interface';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  @HostBinding('class.loaded')
+  loaded = false;
   stagedDateEntries: DateEntries;
   overviewData: DateEntries[] = [];
   unsubscribe: Subject<void>;
@@ -30,6 +32,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.uid = u.uid;
       this.getEntriesForMostRecentPopulatedMonth(u.uid, this.getFirstOfMonth())
         .subscribe((entries: Entry[]) => {
+          this.loaded = true;
           this.overviewData = this.formatOverviewData(entries);
           this.onDateSelected(this.getMostRecentEntries(this.overviewData));
         });

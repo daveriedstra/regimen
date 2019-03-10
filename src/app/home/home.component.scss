@@ -1,5 +1,15 @@
 @import "../vars.scss";
 
+:host {
+  display: block;
+  opacity: 0;
+  transition: opacity 250ms ease;
+}
+
+:host(.loaded) {
+  opacity: 1;
+}
+
 .note__content {
   border: thin solid $border-color;
   padding: 2rem;
