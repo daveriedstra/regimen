@@ -19,6 +19,9 @@ ul {
 
 li {
   display: inline-block;
+  &:not(:first-of-type):not(:last-of-type):before {
+    content: "ꞏ";
+  }
 }
 
 a {

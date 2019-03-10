@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './privacy.component.html',
   styleUrls: ['./privacy.component.scss']
 })
-export class PrivacyComponent implements OnInit {
+export class AboutComponent implements OnInit {
 
   constructor() { }
 

@@ -24,7 +24,7 @@ import { NewlinePipe } from './newline.pipe';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { The404Component } from './the404/the404.component';
-import { PrivacyComponent } from './privacy/privacy.component';
+import { AboutComponent } from './privacy/privacy.component';
 import { VisualizerComponent } from './visualizer/visualizer.component';
 import { SelectAllDirective } from './select-all.directive';
 import { DateEntriesComponent } from './date-entries/date-entries.component';
@@ -45,7 +45,7 @@ import { PrettyDurationPipe } from './pretty-duration.pipe';
     HeaderComponent,
     FooterComponent,
     The404Component,
-    PrivacyComponent,
+    AboutComponent,
     VisualizerComponent,
     SelectAllDirective,
     DateEntriesComponent,
