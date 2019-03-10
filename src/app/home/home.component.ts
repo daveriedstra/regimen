@@ -14,10 +14,13 @@ import DateEntries from '../models/date-entries.interface';
 export class HomeComponent implements OnInit, OnDestroy {
   @HostBinding('class.loaded')
   loaded = false;
+  @HostBinding('class.loading')
+  loading = false;
   stagedDateEntries: DateEntries;
   overviewData: DateEntries[] = [];
   unsubscribe: Subject<void>;
   private uid: string;
+  private loadingDelay = 2 * 1000;
 
   constructor(
     private afstore: AngularFirestore,
@@ -26,6 +29,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.unsubscribe = new Subject();
+    const loadingTimeout = setTimeout(() => this.loading = true, this.loadingDelay);
     this.afAuth.user.pipe(
       take(1)
     ).subscribe(u => {
@@ -33,6 +37,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.getEntriesForMostRecentPopulatedMonth(u.uid, this.getFirstOfMonth())
         .subscribe((entries: Entry[]) => {
           this.loaded = true;
+          this.loading = false;
+          clearTimeout(loadingTimeout);
           this.overviewData = this.formatOverviewData(entries);
           this.onDateSelected(this.getMostRecentEntries(this.overviewData));
         });
