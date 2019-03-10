@@ -28,6 +28,7 @@ import { PrivacyComponent } from './privacy/privacy.component';
 import { VisualizerComponent } from './visualizer/visualizer.component';
 import { SelectAllDirective } from './select-all.directive';
 import { DateEntriesComponent } from './date-entries/date-entries.component';
+import { PrettyDurationPipe } from './pretty-duration.pipe';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { DateEntriesComponent } from './date-entries/date-entries.component';
     PrivacyComponent,
     VisualizerComponent,
     SelectAllDirective,
-    DateEntriesComponent
+    DateEntriesComponent,
+    PrettyDurationPipe
   ],
   imports: [
     BrowserModule,

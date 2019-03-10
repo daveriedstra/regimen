@@ -11,6 +11,7 @@ import { Entry } from '../models/entry.model';
 import { FakeAfstoreDoc } from '../../mocks/fake-afstore-doc';
 import { FakeAfstoreColl } from '../../mocks/fake-afstore-coll';
 import { DateEntriesComponent } from '../date-entries/date-entries.component';
+import { PrettyDurationPipe } from '../pretty-duration.pipe';
 
 const makeEntriesBetween = (afterDate: Date, beforeDate: Date) => {
   const out: Entry[] = [];
@@ -55,7 +56,8 @@ describe('HomeComponent', () => {
         HomeComponent,
         NewlinePipe,
         VisualizerComponent,
-        DateEntriesComponent
+        DateEntriesComponent,
+        PrettyDurationPipe
       ],
       providers: [
         { provide: AngularFireAuth, useValue: fakeAfAuth },

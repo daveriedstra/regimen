@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DateEntriesComponent } from './date-entries.component';
 import { NewlinePipe } from '../newline.pipe';
+import { PrettyDurationPipe } from '../pretty-duration.pipe';
 
 describe('DateEntriesComponent', () => {
   let component: DateEntriesComponent;
@@ -11,7 +12,8 @@ describe('DateEntriesComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         DateEntriesComponent,
-        NewlinePipe
+        NewlinePipe,
+        PrettyDurationPipe
       ]
     })
     .compileComponents();
