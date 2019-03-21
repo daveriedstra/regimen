@@ -13,7 +13,7 @@ import { Entry } from '../models/entry.model';
 })
 export class NewEntryComponent implements OnInit {
   private userEntryCollection: AngularFirestoreCollection<Entry>;
-  dateVal = (new Date()).toISOString().substr(0, 10);
+  dateVal: string;
   entry: Entry = {
     date: new Date(),
     duration: 0,
@@ -30,6 +30,7 @@ export class NewEntryComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dateVal = this.getTodayIsoString();
     this.afAuth.user.pipe(
       take(1)
     ).subscribe(u => {
@@ -57,5 +58,11 @@ export class NewEntryComponent implements OnInit {
 
     this.userEntryCollection.add(this.entry)
       .then(ref => this.router.navigate(['/']));
+  }
+
+  private getTodayIsoString(): string {
+    const today = new Date();
+    today.setMinutes(-today.getTimezoneOffset()); // ensure we're representing today in localtime
+    return (today).toISOString().substr(0, 10);
   }
 }
